@@ -11,5 +11,6 @@
  */
 $routes = array(
 	'/test' => 'test#index',
-	'/test2' => 'test2#index'
+	'/test2' => 'test2#index',
+	'/user' => 'user#index'
 );
