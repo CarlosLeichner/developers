@@ -7,7 +7,20 @@ include("UserModel.php");
 // require './Models/EmployeeModel.php';
 
 class UserController extends ApplicationController
-{
+{    
+    // Funció per Afegir
+    public function AddUser(){
+
+        $objUser = new UserModel();
+			$data['nom'] = $this->request->getVar("isbn");
+			$data['rol'] = $this->request->getVar("title");
+			$objUser->save($data);
+    }
+
+    // Funció per Eliminar
+    // Funció per Modificar - vista modif 
+
+    // Funció per Mostrar
 	public function indexAction(){
         // Mostrem el JSON tal qual tipus TXT:
         $data_users = file_get_contents("../db/users.json");

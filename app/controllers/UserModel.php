@@ -1,6 +1,6 @@
 <?php
 
-class User {
+class UserModel {
 
     // ATRIBUTS
     private int $_id_User = 0;
