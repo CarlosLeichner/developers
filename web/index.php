@@ -1,5 +1,9 @@
 <?php
 
+// INI of our HTML
+include("./includes/header.php");
+
+
 error_reporting(E_ALL|E_STRICT);
 ini_set('display_errors', 1);
 date_default_timezone_set('CET');
@@ -11,8 +15,8 @@ define('ROOT_PATH', realpath(dirname(__FILE__) . '/../'));
 // defines the cms path
 define('CMS_PATH', ROOT_PATH . '/lib/base/');
 
-// starts the session
-session_start();
+// starts the session - already startet in header.php
+// session_start();
 
 // includes the system routes. Define your own routes in this file
 include(ROOT_PATH . '/config/routes.php');
@@ -46,3 +50,8 @@ spl_autoload_register('autoloader');
 
 $router = new Router();
 $router->execute($routes);
+
+// END of our HTML
+include("./includes/footer.php");
+
+?>
