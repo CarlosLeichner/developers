@@ -1,23 +1,31 @@
 <?php
 
 echo "entrant a UserController... <br><br>";
-// include_once(".\app\models\UserModel.php");
-// include_once("UserModel.php");
-include("UserModel.php");
-// require './Models/EmployeeModel.php';
+
+require_once ROOT_PATH . '/app/models/UserModel.php';
 
 class UserController extends ApplicationController
 {    
     // Funció per Afegir
-    public function AddUser(){
-
+    public function add(){
+        $data = ['nom'=>'','rol'=>''];
+        // Instanciem l'objecte real        
         $objUser = new UserModel();
-			$data['nom'] = $this->request->getVar("isbn");
-			$data['rol'] = $this->request->getVar("title");
-			$objUser->save($data);
+		    $data['nom'] = "nombreTest";   // $_POST["inpName"];
+			$data['rol'] = "rolTest";      // $_POST["inpRol"]; 
+		$objUser->save($data);
+        return true;
     }
 
     // Funció per Eliminar
+    public function delete($id){
+        // Instanciem l'objecte real        
+        $objUser = new UserModel();
+            $data['nom'] = $_POST["inpName"];
+            $data['rol'] = $_POST["inpRol"]; 
+        $objUser->save($data);
+        return true;
+    }
     // Funció per Modificar - vista modif 
 
     // Funció per Mostrar
@@ -37,7 +45,8 @@ class UserController extends ApplicationController
         // Instanciem l'objecte real - omplint Array d'Objectes per cada User 
         $arrUsers = [];
         foreach ($json_users as $register){
-            $objUser = new User("1",$register[1],$register[2]);
+            // $objUser = new UserModel("1",$register[1],$register[2]);
+            $objUser = new UserModel;
             // $objUser->__construct($id,$name,$rol)
             // $objUser->setName($register[1]);
             // $objUser->setRol($register[2]);            
