@@ -11,8 +11,9 @@ private $_currentStatus_id;
 private $_deleted= False;
 private $_masterUsr_id;
 private $_slaveUsr_id;
-Private $Task;
-Private $db;
+private $Task;
+private $db;
+private $data = "'" .$this->_id. "','".$this->_slaveUsr_id . "','". $this->_masterUsr_id. "','". $this->_currentStatus_id. "','". $this->_done. "','". $this->_initiated. "','". $this->_created_at. "','". $this->_description."'"; 
 
 public function __construct()
 {
@@ -90,8 +91,8 @@ public function setDeleted($_deleted){
 }
 
 
-public function add($tasks, $_slaveUsr_id , $_masterUsr_id, $_deleted, $_currentStatus_id, $_done, $_initiated, $_created_at, $_description, $_id){
-    $consult = "INSERT INTO" .$tasks. " values(".$this->_id .$this->_slaveUsr_id . $this->_masterUsr_id. $this->_deleted. $this->_currentStatus_id. $this->_done. $this->_initiated. $this->_created_at. $this->_description.")";
+public function add($tasks, $data){
+    $consult = "INSERT INTO" .$tasks. " values(".$data.")";
     $result= $this->db->query($consult);
     if ($result) {
         return true;
