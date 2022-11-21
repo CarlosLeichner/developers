@@ -91,7 +91,7 @@ public function setDeleted($_deleted){
 
 
 public function add($tasks, $_slaveUsr_id , $_masterUsr_id, $_deleted, $_currentStatus_id, $_done, $_initiated, $_created_at, $_description, $_id){
-    $consult = "INSERT INTO".$tasks." values (".$this->_id .$this->_slaveUsr_id . $this->_masterUsr_id. $this->_deleted. $this->_currentStatus_id. $this->_done. $this->_initiated. $this->_created_at. $this->_description.")";
+    $consult = "INSERT INTO" .$tasks. " values(".$this->_id .$this->_slaveUsr_id . $this->_masterUsr_id. $this->_deleted. $this->_currentStatus_id. $this->_done. $this->_initiated. $this->_created_at. $this->_description.")";
     $result= $this->db->query($consult);
     if ($result) {
         return true;
@@ -102,7 +102,7 @@ public function add($tasks, $_slaveUsr_id , $_masterUsr_id, $_deleted, $_current
 }
 
 public function show($tasks, $condition){
-    $consult = "SELECT * FROM ".$tasks." WHERE ".$condition.";";
+    $consult = "SELECT * FROM ".$tasks. " WHERE ".$condition.";";
     $result = $this->db->query($consult);
     while($row = $result->fetchAll(PDO::FETCH_ASSOC)){
         $this->tasks[]= $row;
@@ -110,7 +110,7 @@ public function show($tasks, $condition){
     return json_encode($this->tasks);
 }
 public function update ($tasks, $data, $condition ){
-    $consult = "UPDATE ".$tasks." SET ".$data. " WHERE ".$condition ;
+    $consult = "UPDATE " .$tasks. " SET ".$data. " WHERE ".$condition ;
     $result = $this->db->query($consult);
     if ($result) {
        return true;

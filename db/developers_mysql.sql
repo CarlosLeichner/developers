@@ -40,7 +40,7 @@ CREATE TABLE `currentstatus` (
 -- Estructura de tabla para la tabla `subtasks`
 --
 
-CREATE TABLE `subtasks` (
+/*CREATE TABLE `subtasks` (
   `id_subtask` int(6) NOT NULL,
   `task_id` int(6) NOT NULL,
   `slaveUsr_id` int(6) NOT NULL,
@@ -49,7 +49,7 @@ CREATE TABLE `subtasks` (
   `currentStatus` int(6) NOT NULL,
   `deleted` tinyint(1) NOT NULL,
   `description` varchar(60) COLLATE utf8_spanish_ci NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_spanish_ci;*/
 
 -- --------------------------------------------------------
 
@@ -150,8 +150,8 @@ ALTER TABLE `currentstatus`
 --
 -- AUTO_INCREMENT de la tabla `subtasks`
 --
-ALTER TABLE `subtasks`
-  MODIFY `id_subtask` int(6) NOT NULL AUTO_INCREMENT;
+/*ALTER TABLE `subtasks`
+  MODIFY `id_subtask` int(6) NOT NULL AUTO_INCREMENT;*/
 
 --
 -- AUTO_INCREMENT de la tabla `tasks`
