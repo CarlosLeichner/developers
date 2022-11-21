@@ -43,61 +43,55 @@ class UserModel {
     }
 
     // METODES
+    public function showById_MySql($table, $id){
+        $criteria = 'id=' . $id;
+        $consulta = "SELECT * FROM " . $table . " WHERE " . $criteria;
+        $strData = "Cod.:" . $this->getUserId();
+        $strData .= " | Nombre: " . $this->getUserName();
+        $strData .= " | Rol: " . $this->getUserRol();
+        $strData .= " | Alta: " . $this->getUserCreatedAt();
+        $strData .= " <br> ";
+        return $strData;
+    }
+
+    public function changeName($newName){
+        $this->setUserName($newName);
+    }
+
+    public function changeRol($newRol){
+        $this->setUserRol($newRol);
+    }
+
     // métodos abstractos (vacíos) que obligará a la subclase a implementarlos:  saveJSON($data), saveMSQL($data), saveMongo($data)
+    // public function save($data){
 
-    // public function show($table, $id, $system['json','mysql','mongo']){
     // }
 
-    // public function save($table, $data, $system['json','mysql','mongo']){
-    // }
-       
-    // implementamos aquí el MOSTRAR
-    public function show($table, $id, $system){
 
-        switch ($system){
-            case 'json':
-                $data_users = file_get_contents("../db/users.json");
-                $json_users = json_decode($data_users, true);
-                echo "ID &nbsp; NAME &nbsp; ROL <br>";
-                echo "------------------- <br>";
-                foreach ($json_users as $register){
-                    foreach ($register as $field) {    
-                        echo $field." - ";
-                    }
-                    echo "<br>";
-                }
-            break;
+    // implementamos aquí el MOSTRAR all:
+    // Mostrem el JSON tal qual tipus TXT:
+    public function showAll($tabla,$criterio){
 
-            case 'mysql':
-                // show All
-                if ($id==0) {
-                    $criteria=' WHERE deleted=0';
-                // show ById
-                }else{
-                    $criteria = ' WHERE deleted=0 AND id=' . $id;
-                }
-                $consulta = "SELECT * FROM " . $table . $criteria;
-                $result = $this->db->query($select);
-                while ($filas=$result->FETCHALL(PDO::FETCH_ASSOC)) {
-                    $this->users[]=$filas;
-                }
-                return $this->users;
-
-                // Debugear en pantalla:
-                // $strData = "Cod.:" . $this->getUserId();
-                // $strData .= " | Nombre: " . $this->getUserName();
-                // $strData .= " | Rol: " . $this->getUserRol();
-                // $strData .= " | Alta: " . $this->getUserCreatedAt();
-                // $strData .= " <br> ";
-                // return $strData;
-            break;
-
-            case 'mongo':
-                // asklñfjasdklñfjkñlsj
-            break;
+        $data_users = file_get_contents("../db/users.json");
+        $json_users = json_decode($data_users, true);
+        echo "ID &nbsp; NAME &nbsp; ROL <br>";
+        echo "------------------- <br>";
+        foreach ($json_users as $register){
+            foreach ($register as $field) {    
+                echo $field." - ";
+            }
+            echo "<br>";
         }
-        
-        
+    }
+
+    // implementamos aquí el MOSTRAR byId:
+    public function showById($tabla,$criterio){
+        $select = "SELECT * FROM " .$tabla. " WHERE " .$criterio. ";";
+        $result = $this->db->query($select);
+        while ($filas=$result->FETCHALL(PDO::FETCH_ASSOC)) {
+            $this->personas[]=$filas;
+        }
+        return $this->personas;
     }
 
     // implementamos aquí el SAVE a MySql:

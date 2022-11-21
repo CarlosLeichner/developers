@@ -30,18 +30,15 @@ class UserController extends ApplicationController
 
     // Funció per Mostrar
 	public function indexAction(){
-        // Mostrem el JSON tal qual tipus TXT:
-        $data_users = file_get_contents("../db/users.json");
-        $json_users = json_decode($data_users, true);
-        echo "ID &nbsp; NAME &nbsp; ROL <br>";
-        echo "------------------- <br>";
-        foreach ($json_users as $register){
-            foreach ($register as $field) {    
-                echo $field." - ";
-            }
-            echo "<br>";
-        }
+        // instanciar l'objecte segons el Model
+        $objUser = new UserModel();
+        // executar el mètode de classe per retornar el cod=1
+        $data = $objUser->showAll("users","1");
+        $data = $objUser->showById("users","1");
+        require_once("/app/views/scripts/user/index.phtml");
+    }
 
+    function proves(){
         // Instanciem l'objecte real - omplint Array d'Objectes per cada User 
         $arrUsers = [];
         foreach ($json_users as $register){
