@@ -2,6 +2,10 @@
 
 echo "entrant a UserController... <br>";
 
+
+include_once("../models/UserModel.php");
+
+
 class UserController extends ApplicationController
 {
 	public function indexAction(){
@@ -16,7 +20,9 @@ class UserController extends ApplicationController
         }
     }
 
+
     // include_once("../models/UserModel.php");
+
 
     // define('objUSERS',file_get_contents("../db/users.json"));
     // define('objUSERS', JSON.parse("../db/users.json"));

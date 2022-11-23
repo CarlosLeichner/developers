@@ -8,8 +8,9 @@
         "done" : "2022-11-01 01:50:00",
         "currentStatus": "done",
         "deleted": "false",
+
         "description" : "Estudiar Tailwind",
-        
+
     },
     {
         "id_task" : "2",
@@ -20,8 +21,9 @@
         "done" : "null",
         "currentStatus": "pending",
         "deleted": "false",
+
         "description" : "Estudiar Laravel",
-        
+  
     },
     {
         "id_task" : "3",
@@ -32,7 +34,10 @@
         "done" : "null",
         "currentStatus": "in_progress",
         "deleted": "false",
+
         "description" : "Estudiar MongoDB",
         
+
+
     }
 ]
