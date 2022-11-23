@@ -18,7 +18,7 @@ private $data = "'" .$this->_id. "','".$this->_slaveUsr_id . "','". $this->_mast
 public function __construct()
 {
     $this->Task = array();
-    $this->db = new PDO ('mysql:host=localhost;dbname=Tasks',"root","");
+    $this->db = new PDO ('mysql:host=localhost;dbname=developers_mysql',"root","");
     
 }
 public function getTask(){
@@ -95,11 +95,11 @@ public function add($tasks, $data){
     $consult = "INSERT INTO" .$tasks. " values(".$data.")";
     $result= $this->db->query($consult);
     if ($result) {
-        return true;
+        return $result;
     }else {
         return false;
     }
-    return json_encode($this->db->query($consult));
+    
 }
 
 public function show($tasks, $condition){
@@ -108,17 +108,17 @@ public function show($tasks, $condition){
     while($row = $result->fetchAll(PDO::FETCH_ASSOC)){
         $this->tasks[]= $row;
     }
-    return json_encode($this->tasks);
+    return $this->tasks;
 }
 public function update ($tasks, $data, $condition ){
     $consult = "UPDATE " .$tasks. " SET ".$data. " WHERE ".$condition ;
     $result = $this->db->query($consult);
     if ($result) {
-       return true;
+       return $result;
     }else {
         return false;
     }
-    return json_encode($this->db->query($consult));
+    
 }
 
 public function delete($tasks, $condition){
@@ -131,7 +131,7 @@ public function delete($tasks, $condition){
     }
     
 }
-
+   
 
 }
 

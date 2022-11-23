@@ -9,21 +9,7 @@
         "currentStatus": "done",
         "deleted": "false",
         "description" : "Estudiar Tailwind",
-        "subTasks" : 
-            [
-                {
-                    "id_subTask" : "1",
-                    "description" : "arrancar ordenador"
-                },
-                {
-                    "id_subTask" : "2",   
-                    "description" : "abrir explorador"
-                },
-                {
-                    "id_subTask" : "3",
-                    "description" : "ejecutar visualizador"
-                }
-            ]
+        
     },
     {
         "id_task" : "2",
@@ -35,21 +21,7 @@
         "currentStatus": "pending",
         "deleted": "false",
         "description" : "Estudiar Laravel",
-        "subTasks" : 
-            [
-                {
-                    "id_subTask" : "1",
-                    "description" : "arrancar ordenador"
-                },
-                {
-                    "id_subTask" : "4",   
-                    "description" : "abrir vscode"
-                },
-                {
-                    "id_subTask" : "5",
-                    "description" : "implementar clases"
-                }
-            ]
+        
     },
     {
         "id_task" : "3",
@@ -61,20 +33,6 @@
         "currentStatus": "in_progress",
         "deleted": "false",
         "description" : "Estudiar MongoDB",
-        "subTasks" : 
-            [
-                {
-                    "id_subTask" : "1",
-                    "description" : "arrancar ordenador"
-                },
-                {
-                    "id_subTask" : "6",   
-                    "description" : "abrir Compass"
-                },
-                {
-                    "id_subTask" : "7",
-                    "description" : "implementar consultas"
-                }
-            ]
+        
     }
 ]

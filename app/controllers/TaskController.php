@@ -28,11 +28,11 @@ class TaskController{
         $task = new TaskModel();
         $add = $task->add("tasks", $data);
         if($add){
-            return true;
+            return $add;
         }else {
             return false;
         }
-        return $add;
+        
 
     }
     public function update(){
@@ -51,11 +51,11 @@ class TaskController{
         $task = new TaskModel();
         $update = $task->update("tasks", $data, $condition);
         if($update){
-            return true;
+            return $update;
         }else {
             return false;
     }
-    return $update;
+    
 }
     public function delete (){
 
