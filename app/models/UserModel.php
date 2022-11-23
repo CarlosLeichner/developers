@@ -3,6 +3,16 @@
 class UserModel {
 
     // ATRIBUTS
+    private $jsonFile = "../db/users.json"; 
+    private array $_data=[
+        'id_user' => '0',
+        'strCreatedAt' => '',
+        'strName' => '',
+        'strRol'  => "",
+        'deleted' => '0'
+    ];
+    // utilizar una función existente que ya lo convierte en un Array asociativo automáticamente
+    
     private int $_id_User = 0;
     private string $_strCreatedAt = "";
     private string $_strName = "";
@@ -52,20 +62,33 @@ class UserModel {
     // }
        
     // implementamos aquí el MOSTRAR
-    public function show($table, $id, $system){
+    public function show($system,$table, $id){
 
         switch ($system){
             case 'json':
-                $data_users = file_get_contents("../db/users.json");
-                $json_users = json_decode($data_users, true);
-                echo "ID &nbsp; NAME &nbsp; ROL <br>";
-                echo "------------------- <br>";
-                foreach ($json_users as $register){
-                    foreach ($register as $field) {    
-                        echo $field." - ";
-                    }
-                    echo "<br>";
+                $jsnUsers = file_get_contents($this->jsonFile);
+                $arrUsers = json_decode($jsnUsers, true);                
+                
+                // return !empty($arrUsers)? $arrUsers : false;
+
+                if ($id==0){
+                    return $arrUsers;
+                }else{
+                    $singleUser = array_filter($arrUsers, function($obj) { return $ojb->id_user === $id });
+                    return $singleUser;
                 }
+
+                // echo "ID &nbsp; NAME &nbsp; ROL <br>";
+                // echo "------------------- <br>";
+                // foreach ($arrUsers as $register){
+                //     foreach ($register as $field) {    
+                //         if ($register[$field]==$id){ 
+                //             echo "Id: " . $field ." - ";
+                //             echo "Nom: " . $field . "<br>" ;
+                //         }
+                //     }
+                //     echo "<br>";
+                // }
             break;
 
             case 'mysql':
@@ -101,10 +124,42 @@ class UserModel {
     }
 
     // implementamos aquí el SAVE a MySql:
-    public function saveMySql($table,$data){
-        $insert = "insert into " . $table . " values(null,".$data.")";
-        $result = $this->db->query($insert);
-        if ($result) return true; else return false;
+    public function save($system,$table,$id,$newData){
+
+        switch ($system){
+            case 'json':
+                $jsnUsers = file_get_contents($this->jsonFile);
+                $arrUsers = json_decode($jsnUsers, true);                
+
+                if ($id==0){
+                    if (!empty($arrUsers)){
+                        array_push($arrUsers, $newData);
+                    }else{
+                        $arrUsers[] = $newData;
+                    }                    
+                }else{
+                    $singleUser = array_filter(
+                        $arrUsers, 
+                        function($obj) { return $ojb->id === $id }
+                    );
+                    $singleUser = $newData;                
+                }
+                // ACCION DE GRABAR
+                $result = file_put_contents($this->jsonFile, json_encode($singleUser));
+                return $result? true : false;                
+            break;
+        
+            case 'mysql':
+                $insert = "insert into " . $table . " values(null,".$data.")";
+                $result = $this->db->query($insert);
+                return $result? true : false;  
+            break;
+
+            case 'mongo':
+                // to-do
+            break;
+        }
+
     }
 
     // implementamos aquí el SAVE a JSON:
