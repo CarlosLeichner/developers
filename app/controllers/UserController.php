@@ -1,8 +1,11 @@
 <?php
 
+
 echo "entrant a UserController... <br><br>";
 
 require_once ROOT_PATH . '/app/models/UserModel.php';
+
+
 
 class UserController extends ApplicationController
 {    
@@ -50,12 +53,13 @@ class UserController extends ApplicationController
             array_push($arrUsers,$objUser);
         }
 
+
         foreach ($arrUsers as $person){
             echo $person->showUsers();
         }
         // $objUser->showUser();
     }
-    
+
 
     // define('objUSERS',file_get_contents("../db/users.json"));
     // define('objUSERS', JSON.parse("../db/users.json"));
