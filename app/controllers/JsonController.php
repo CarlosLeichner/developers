@@ -102,7 +102,7 @@ if(isset($_POST['taskSubmit'])){
                 $sessData['status']['type'] = 'error'; 
                 $sessData['status']['msg'] = 'Some problem occurred, please try again.'; 
                 // Set redirect url 
-                $redirectURL = 'addEdit.php'.$id_str; 
+                $redirectURL = 'web/index.php'.$id_str; 
             } 
         }else{ 
             // Insert user data 
@@ -119,7 +119,7 @@ if(isset($_POST['taskSubmit'])){
                 $sessData['status']['msg'] = 'Some problem occurred, please try again.'; 
                  
                 // Set redirect url 
-                $redirectURL = 'addEdit.php'.$id_str; 
+                $redirectURL = 'web/index.php'.$id_str; 
             } 
         } 
     }else{ 
@@ -127,7 +127,7 @@ if(isset($_POST['taskSubmit'])){
         $sessData['status']['msg'] = '<p>Please fill all the mandatory fields.</p>'.$errorMsg; 
          
         // Set redirect url 
-        $redirectURL = 'addEdit.php'.$id_str; 
+        $redirectURL = 'web/index.php'.$id_str; 
     } 
      
     // Store status into the session 
