@@ -23,39 +23,21 @@ class UserModel {
     public function __construct($path_json_file){
         $this->_jsonFile = $pathJsonFile;
         $this->_fields=[
-            // 'id_user' => '0',
-            'strCreatedAt' => '',
+            // 'id_user' => getMaxId(),
+            'strCreatedAt' => date("Y-m-d H:i:s"),
             'strName' => '',
-            'strRol'  => "",
+            'strRol'  => '',
             'deleted' => '0'
         ];
         
-        $this->_id_User = $id;
-        $this->_strCreatedAt = date("Y-m-d H:i:s");  // formato "2022-12-31 15:30:54"
-        $this->_strName = $name;
-        $this->_strRol = $rol;
-        $this->_deleted = 0;
+        // $this->_id_User = $id;
+        // $this->_strCreatedAt = date("Y-m-d H:i:s");  // formato "2022-12-31 15:30:54"
+        // $this->_strName = $name;
+        // $this->_strRol = $rol;
+        // $this->_deleted = 0;
     }
 
     // GETTERS-SETTERS - deberán ser privados
-    private function getMaxId(){
-        $maxId = 0;
-        $arrfields = $this->getFields();
-        foreach ($arrFields as $field=>$value){
-            if ($field == "id_user"){
-                if ($maxId < $value){
-                    $maxId = $value;
-                }
-            }
-        }        
-        return $maxId;
-
-        // TEORIA foreach:
-	    // foreach ($_POST as $clave=>$valor){
-   		//     echo "El valor de $clave es: $valor";
-   		// }        
-    }
-
     private function getFields(){
         return $this->_arrFields;
     }
@@ -103,7 +85,25 @@ class UserModel {
 
     // public function save($table, $data, $system['json','mysql','mongo']){
     // }
-       
+
+    // METODES ESPECIFICS de Classe:
+    private function getMaxId(){
+        $maxId = 0;
+        $arrfields = $this->getFields();
+        foreach ($arrFields as $field=>$value){
+            if ($field == "id_user"){
+                if ($maxId < $value){
+                    $maxId = $value;
+                }
+            }
+        }        
+        return $maxId;
+
+        // TEORIA foreach:
+	    // foreach ($_POST as $clave=>$valor){
+   		//     echo "El valor de $clave es: $valor";
+   		// }        
+    }
     // implementamos aquí el MOSTRAR
     public function show($system,$table, $id){
 
