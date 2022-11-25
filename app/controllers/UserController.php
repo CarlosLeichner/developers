@@ -24,21 +24,30 @@ class UserController extends ApplicationController
 
     // Funció per Afegir
     public function addAction(){
-        echo "add !!!!!";
-        // si tenim dades
-        if (!empty($_POST)) {
-            // recollim les dades
-            $fields = ['nom'=>'$_POST["inpName"]','rol'=>'$_POST["inpRol"]'];
-        
-		    $data['nom'] = "nombreTest";   // $_POST["inpName"];
-			$data['rol'] = "rolTest";      // $_POST["inpRol"];             
-            // Instanciem l'objecte real        
-            $objUser = new UserModel($fields);
-            $objUser->save($fields);
-        }
 
+        if (!empty($_POST)) {
+        
+            // 1. recollim les dades
+            $fields = array(
+                'nom' => $_POST["inpName"],
+                'rol' => $_POST["inpRol"]
+            );
+
+            // 1.1. TEST
+            // $data['nom'] = "nombreTest";   
+			// $data['rol'] = "rolTest";      
+
+            // 2. Instanciem l'objecte real        
+            $objUser = new UserModel($fields);
+        
+            // 3. interactuar amb Model (mètode seu) per llegir/grabar
+            $objUser->save($fields);                    
+        }
 		
-        header('Location: ' . ROOT_PATH . '/app/views/scripts/user/index.phtml');
+        // 4. redireccionem cap a la pàgina de view que volguem
+        header('Location:' .ROOT_PATH.'/app/views/scripts/user/index.phtml');
+                
+        // 5. Tota funció ha de retornar quelcom (true = ha anat bé)
         return true;
     }
 
