@@ -3,9 +3,9 @@
 class UserModel {
 
     // ATRIBUTS
-    private $jsonFile = "../db/users.json"; 
-    private array $_data=[
-        'id_user' => '0',
+    private $_jsonFile = "../db/users.json"; 
+    private array $_fields=[
+        // 'id_user' => '0',
         'strCreatedAt' => '',
         'strName' => '',
         'strRol'  => "",
@@ -20,15 +20,40 @@ class UserModel {
     private int $_deleted = 0;
 
     // CONSTRUCTOR  - no tengo claro si hacer count($_arrUsers) desde el Controller y pasarle el argumento id+1 
-    public function __construct($id,$name,$rol){
-        $this->_id_User = $id;
-        $this->_strCreatedAt = date("Y-m-d H:i:s");  // formato "2022-12-31 15:30:54"
-        $this->_strName = $name;
-        $this->_strRol = $rol;
-        $this->_deleted = 0;
+    public function __construct($path_json_file){
+        $this->_jsonFile = $pathJsonFile;
+        $this->_fields=[
+            // 'id_user' => getMaxId(),
+            'strCreatedAt' => date("Y-m-d H:i:s"),
+            'strName' => '',
+            'strRol'  => '',
+            'deleted' => '0'
+        ];
+        
+        // $this->_id_User = $id;
+        // $this->_strCreatedAt = date("Y-m-d H:i:s");  // formato "2022-12-31 15:30:54"
+        // $this->_strName = $name;
+        // $this->_strRol = $rol;
+        // $this->_deleted = 0;
     }
 
     // GETTERS-SETTERS - deberán ser privados
+    private function getFields(){
+        return $this->_arrFields;
+    }
+
+    private function setFields($arrfields){        
+        $data = [
+            $id_User = $arrfields[0],
+            $strCreatedAt = date("Y-m-d H:i:s"),  // formato "2022-12-31 15:30:54"
+            $strName = $arrfields[1],
+            $strRol = $fiarrfieldselds[2],           
+            $deleted = $arrfields[3],
+        ];
+        array_push($this->_arrFields,$data);
+    }
+
+    // estos ya no los vamos a usar porque ahora tenemos los Atributos dentro de un Array
     private function getUserId(){
         return $this->_id_User;
     }
@@ -60,7 +85,25 @@ class UserModel {
 
     // public function save($table, $data, $system['json','mysql','mongo']){
     // }
-       
+
+    // METODES ESPECIFICS de Classe:
+    private function getMaxId(){
+        $maxId = 0;
+        $arrfields = $this->getFields();
+        foreach ($arrFields as $field=>$value){
+            if ($field == "id_user"){
+                if ($maxId < $value){
+                    $maxId = $value;
+                }
+            }
+        }        
+        return $maxId;
+
+        // TEORIA foreach:
+	    // foreach ($_POST as $clave=>$valor){
+   		//     echo "El valor de $clave es: $valor";
+   		// }        
+    }
     // implementamos aquí el MOSTRAR
     public function show($system,$table, $id){
 
@@ -74,7 +117,7 @@ class UserModel {
                 if ($id==0){
                     return $arrUsers;
                 }else{
-                    $singleUser = array_filter($arrUsers, function($obj) { return $ojb->id_user === $id });
+                    // $singleUser = array_filter($arrUsers, function($obj) { return $ojb->id_user === $id });
                     return $singleUser;
                 }
 
@@ -133,6 +176,7 @@ class UserModel {
 
                 if ($id==0){
                     if (!empty($arrUsers)){
+
                         array_push($arrUsers, $newData);
                     }else{
                         $arrUsers[] = $newData;
@@ -140,7 +184,7 @@ class UserModel {
                 }else{
                     $singleUser = array_filter(
                         $arrUsers, 
-                        function($obj) { return $ojb->id === $id }
+                        // function($obj) { return $ojb->id === $id }
                     );
                     $singleUser = $newData;                
                 }
@@ -156,6 +200,7 @@ class UserModel {
             break;
 
             case 'mongo':
+                echo "metodo con mongo";
                 // to-do
             break;
         }
@@ -163,14 +208,16 @@ class UserModel {
     }
 
     // implementamos aquí el SAVE a JSON:
-    public function save($data){
-        // cambia el ESTADO de los Atributos, pero es VOLATIL
-        $this->setUserName($data['nom']);
-        $this->setUserRol($data['rol']);
-        // cambia en FICHERO su contenido, PERSISTENCIA de datos
-        json_encode($data);
-        file_put_contents("../db/users.json",$data);
-    }
+    // public function save($data){
+
+    //     echo "estoy dentro del save";        
+    //     // cambia el ESTADO de los Atributos, pero es VOLATIL
+    //     $this->setUserName($data['nom']);
+    //     $this->setUserRol($data['rol']);
+    //     // cambia en FICHERO su contenido, PERSISTENCIA de datos
+    //     json_encode($data);
+    //     file_put_contents("../db/users.json",$data);
+    // }
 
     // implementamos aquí el DELETE a JSON (un recycle nos permite recuperarlo, todavia no Delete total)
     public function recycle($data,$status){
