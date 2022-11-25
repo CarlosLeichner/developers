@@ -1,56 +1,109 @@
 <?php
 session_start();
-require_once ("app/models/ClassJson.php");
 require __DIR__.'db/tasks.json';
-$db = new Json(); 
- 
-// Set default redirect url 
+require_once ROOT_PATH . '/app/models/jsonModel.class.php';
+
 $redirectURL = ('web/index.php'); 
-// Submitted form  
-$taskData = array( 
-    'description' => $description, 
-    'created_at' => $created_at, 
-    'currentStatus' => $currentStatus, 
-    'masterUsr_id' => $masterUsr_id,
-    'slaveUsr_id' =>  $slaveUsr_id,
-    'initiated'=> $initiated,
-    'done'=> $done,
-    'deleted'=> $deleted
-); 
-function createTask($taskData){
-    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $taskData = array_merge($taskData, $_POST);}
-    if ($taskData){
-        $task = createTask($_POST);
-        return $task;
+class JsonController extends ApplicationController{
+    private $taskData = array( 
+        'description' => $this->description, 
+        'created_at' => $this->created_at, 
+        'currentStatus' => $this->currentStatus, 
+        'masterUsr_id' => $this->masterUsr_id,
+        'slaveUsr_id' =>  $this->slaveUsr_id,
+        'initiated'=> $this->initiated,
+        'done'=> $this->done,
+        'deleted'=> $this->deleted
+    ); 
+    function __contruct (){
+        $this->taskData = array( 
+            'description' => $this->description, 
+            'created_at' => $this->created_at, 
+            'currentStatus' => $this->currentStatus, 
+            'masterUsr_id' => $this->masterUsr_id,
+            'slaveUsr_id' =>  $this->slaveUsr_id,
+            'initiated'=> $this->initiated,
+            'done'=> $this->done,
+            'deleted'=> $this->deleted
+        ); 
     }
-     
-}
-function deleteTask(){
-     if (!isset($_POST['id'])) {
-        echo "not found";
-        exit;
+    public function indexAction(){
+        $TaskObj = new JsonModel();
+        $taskData = $TaskObj->getTasks();
+        $taskData = $TaskObj->getTaskbyID();
+        require_once ('/app/views/scripts/task/index.phtml');
     }
-    $taskId = $_POST['id'];
-    deletetask($taskId);
-    
-}
-function updateTask($db){
+    function addAction($taskData){
+        if ( !empty($_POST)) { 
+            $data = file_get_contents('db/tasks.json');
+            $data = json_decode($data, true);
+            $this->taskData = array (
+                
+                    'description' => $_POST ['description'], 
+                    'created_at' => $_POST ['created_at'], 
+                    'currentStatus' => $_POST ['currentStatus'], 
+                    'masterUsr_id' => $_POST ['masterUsr_id'],
+                    'slaveUsr_id' =>  $_POST ['slaveUsr_id'],
+                    'initiated'=> $_POST ['initiated'],
+                    'done'=> $_POST ['done'],
+                    'deleted'=> $_POST ['deleted']
+            );
+            $TaskObj = new JsonModel();
+            $TaskObj->createTask();
+        }
+        if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $this->taskData = array_merge($this->taskData, $_POST);}
+        if ($this->taskData){
+            $this->TaskObj->createTask();
+            return $this->TaskObj;
+            header('Location: ' . ROOT_PATH . '/app/views/scripts/task/index.phtml');
+        }
+        
+    }
+function delAction($id){
+    $TaskObj = new JsonModel();
     if (!isset($_GET['id'])) {
         echo "not found";
         exit;
     }
     $taskId = $_GET['id'];
-    
-    $task =  $db->getTaskbyID($taskId);
+    $TaskObj->deletetask($id);
+    header('Location: ' . ROOT_PATH . '/app/views/scripts/task/index.phtml');
+
+}
+function editAction($id, $task, $taskData){
+    if (!isset($_GET['id'])) {
+        echo "not found";
+        exit;
+    }
+    $TaskObj = new JsonModel();
+    $taskId = $_GET['id'];
+    $data = file_get_contents('users.json');
+	$task = json_decode($data, true);
+    $task =  $TaskObj->getTaskbyID($id);
     if (!$task) {
         echo "not found";
         exit;
-}
-}
+    }
+    if(isset($_POST['id'])){
+    $taskData = array(
+        'description' => $_POST ['description'], 
+        'created_at' => $_POST ['created_at'], 
+        'currentStatus' => $_POST ['currentStatus'], 
+        'masterUsr_id' => $_POST ['masterUsr_id'],
+        'slaveUsr_id' =>  $_POST ['slaveUsr_id'],
+        'initiated'=> $_POST ['initiated'],
+        'done'=> $_POST ['done'],
+        'deleted'=> $_POST ['deleted']
+        );
+    $task->updateTask();
+    $task[$taskId] = $taskData;
+ 
+	$data = json_encode($taskData, JSON_PRETTY_PRINT);
+	file_put_contents('db/tasks.json', $data);
+    }
 
-
-if(isset($_POST['taskSubmit'])){ 
+    if(isset($_POST['taskSubmit'])){ 
     // Get form fields value 
     $id = $_POST['id']; 
     $description = trim(strip_tags($_POST['description'])); 
@@ -90,7 +143,7 @@ if(isset($_POST['taskSubmit'])){
     if(empty($errorMsg)){ 
         if(!empty($_POST['id'])){ 
             // Update task data 
-            $update = $db->updateTask($taskData, $_POST['id']); 
+            $update = $task->updateTask($taskData, $_POST['id']); 
              
             if($update){ 
                 $sessData['status']['type'] = 'success'; 
@@ -106,7 +159,7 @@ if(isset($_POST['taskSubmit'])){
             } 
         }else{ 
             // Insert user data 
-            $insert = $db->createTask($taskData); 
+            $insert = $task->createTask($taskData); 
              
             if($insert){ 
                 $sessData['status']['type'] = 'success'; 
@@ -134,7 +187,7 @@ if(isset($_POST['taskSubmit'])){
     $_SESSION['sessData'] = $sessData; 
 }elseif(($_REQUEST['action_type'] == 'delete') && !empty($_GET['id'])){ 
     // Delete data 
-    $delete = $db->deleteTask($_GET['id']); 
+    $delete = $task->deleteTask($_GET['id']); 
      
     if($delete){ 
         $sessData['status']['type'] = 'success'; 
@@ -148,9 +201,11 @@ if(isset($_POST['taskSubmit'])){
     $_SESSION['sessData'] = $sessData; 
 } 
     
- 
+
 // Redirect to the respective page 
 header("Location:".$redirectURL);  
 exit();
+
+}
 
 ?>
