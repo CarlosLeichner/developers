@@ -8,22 +8,9 @@
         "done" : "2022-11-01 01:50:00",
         "currentStatus": "done",
         "deleted": "false",
-        "descrip" : "Estudiar Tailwind",
-        "subTasks" : 
-            [
-                {
-                    "id_subTask" : "1",
-                    "descrip" : "arrancar ordenador"
-                },
-                {
-                    "id_subTask" : "2",   
-                    "descrip" : "abrir explorador"
-                },
-                {
-                    "id_subTask" : "3",
-                    "descrip" : "ejecutar visualizador"
-                }
-            ]
+
+        "description" : "Estudiar Tailwind",
+
     },
     {
         "id_task" : "2",
@@ -34,22 +21,9 @@
         "done" : "null",
         "currentStatus": "pending",
         "deleted": "false",
-        "descrip" : "Estudiar Laravel",
-        "subTasks" : 
-            [
-                {
-                    "id_subTask" : "1",
-                    "descrip" : "arrancar ordenador"
-                },
-                {
-                    "id_subTask" : "4",   
-                    "descrip" : "abrir vscode"
-                },
-                {
-                    "id_subTask" : "5",
-                    "descrip" : "implementar clases"
-                }
-            ]
+
+        "description" : "Estudiar Laravel",
+  
     },
     {
         "id_task" : "3",
@@ -60,21 +34,10 @@
         "done" : "null",
         "currentStatus": "in_progress",
         "deleted": "false",
-        "descrip" : "Estudiar MongoDB",
-        "subTasks" : 
-            [
-                {
-                    "id_subTask" : "1",
-                    "descrip" : "arrancar ordenador"
-                },
-                {
-                    "id_subTask" : "6",   
-                    "descrip" : "abrir Compass"
-                },
-                {
-                    "id_subTask" : "7",
-                    "descrip" : "implementar consultas"
-                }
-            ]
+
+        "description" : "Estudiar MongoDB",
+        
+
+
     }
 ]
