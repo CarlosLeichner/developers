@@ -2,35 +2,45 @@
 [
     {
         "id_status" : "1",
-        "descrip" : "Pending",
+
+        "description" : "Pending",
+
         "progress" : "0%",
         "active": true,
         "color" : "lightred"
     },
     {
         "id_status" : "2",
-        "descrip" : "Initiated",
+
+        "description" : "Initiated",
+
         "progress" : "15%",
         "active": false,
         "color" : "blue"        
     },
     {
         "id_status" : "3",
-        "descrip" : "inProgress",
+
+        "description" : "inProgress",
+
         "progress" : "50%",
         "active": true,
         "color" : "lightblue"        
     },
     {
         "id_status" : "4",
-        "descrip" : "Testing",
+
+        "description" : "Testing",
+
         "progress" : "85%",
         "active": false,
         "color" : "lightgreen"        
     },
     {
         "id_status" : "5",
-        "descrip" : "Done",
+
+        "description" : "Done",
+
         "progress" : "100%",
         "active": true,
         "color" : "green"        
