@@ -4,13 +4,14 @@ class UserModel {
 
     // ATRIBUTS
     private $_jsonFile = "../db/users.json"; 
-    private array $_fields=[
+    public $_fields = array(
         // 'id_user' => '0',
         'strCreatedAt' => '',
         'strName' => '',
         'strRol'  => "",
         'deleted' => '0'
-    ];
+    );
+
     // utilizar una función existente que ya lo convierte en un Array asociativo automáticamente
     
     // private int $_id_User = 0;
@@ -22,13 +23,13 @@ class UserModel {
     // CONSTRUCTOR  - no tengo claro si hacer count($_arrUsers) desde el Controller y pasarle el argumento id+1 
     public function __construct($path_json_file){
         $this->_jsonFile = $pathJsonFile;
-        $this->_fields=[
+        $this->_fields=array(
             // 'id_user' => getMaxId(),
             'strCreatedAt' => date("Y-m-d H:i:s"),
             'strName' => '',
             'strRol'  => '',
             'deleted' => '0'
-        ];
+        );
         
         // $this->_id_User = $id;
         // $this->_strCreatedAt = date("Y-m-d H:i:s");  // formato "2022-12-31 15:30:54"
