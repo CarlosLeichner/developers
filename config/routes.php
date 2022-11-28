@@ -17,10 +17,10 @@ $routes = array(
 	'/check' => 'test#check',
 
 	// rutes per taula USERS
-	'/user'      => 'user#index',
-	'/user/add'  => 'user#add',
-	'/user/edit' => 'user#edit',   // 'UserController.php?id=3' ... rebrà per GET la ID ... function editAction($_GET[id])
-	'/user/del'  => 'user#del',
+	'/listuser' => 'user#index',
+	'/adduser'  => 'user#add',
+	'/edituser' => 'user#edit',   // 'UserController.php?id=3' ... rebrà per GET la ID ... function editAction($_GET[id])
+	'/deluser'  => 'user#del',
 
 	// rutes per taula TASKS
 	'/listtask'      => 'jsonModel#index',
