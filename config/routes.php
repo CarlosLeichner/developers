@@ -23,9 +23,9 @@ $routes = array(
 	'/deluser'  => 'user#del',
 
 	// rutes per taula TASKS
-	'/listtask' => 'task#index',
-	'/addtask'  => 'task#add',
-	'/edittask' => 'task#edit',
-	'/deltask'  => 'task#del'
+	'/listtask'      => 'jsonModel#index',
+	'/addtask'  => 'jsonModel#add',
+	'/edittask' => 'jsonModel#edit',
+	'/deltask'  => 'jsonModel#del'
 	
 );

@@ -4,16 +4,16 @@ class TaskModel{
 
 private int $_id;
 private string $_description;
-private $_created_at = date("Y-m-d H:i:s");
-private $_initiated = date("Y-m-d H:i:s");
-private $_done = date("Y-m-d H:i:s");
+private $_created_at;
+private $_initiated;
+private $_done ;
 private $_currentStatus_id;
 private $_deleted= False;
 private $_masterUsr_id;
 private $_slaveUsr_id;
 private $Task;
 private $db;
-private $data = "'" .$this->_id. "','".$this->_slaveUsr_id . "','". $this->_masterUsr_id. "','". $this->_currentStatus_id. "','". $this->_done. "','". $this->_initiated. "','". $this->_created_at. "','". $this->_description."'"; 
+//private $data = "'" .$this->_id. "','".$this->_slaveUsr_id . "','". $this->_masterUsr_id. "','". $this->_currentStatus_id. "','". $this->_done. "','". $this->_initiated. "','". $this->_created_at. "','". $this->_description."'"; 
 
 public function __construct()
 {
