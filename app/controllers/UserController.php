@@ -6,22 +6,54 @@ echo "entrant a UserController... <br><br>";
 require_once ROOT_PATH . '/app/models/UserModel.php';
 
 
-
 class UserController extends ApplicationController
 {    
-    // Funció per Afegir
-    public function add(){
-        $data = ['nom'=>'','rol'=>''];
-        // Instanciem l'objecte real        
+    // LANDING - Funció per Mostrar
+	public function indexAction(){
+        // instanciar l'objecte segons el Model
         $objUser = new UserModel();
-		    $data['nom'] = "nombreTest";   // $_POST["inpName"];
-			$data['rol'] = "rolTest";      // $_POST["inpRol"]; 
-		$objUser->save($data);
+        // executar el mètode de classe per retornar el cod=1
+        $data = $objUser->showAll("users","1");
+        $data = $objUser->showById("users","1");
+        require_once("/app/views/scripts/user/index.phtml");
+    }
+
+    public function indexOldAction()
+	{
+		$this->view->message = "hello from user::index";
+	}
+
+    // Funció per Afegir
+    public function addAction(){
+
+        if (!empty($_POST)) {
+        
+            // 1. recollim les dades
+            $fields = array(
+                'nom' => $_POST["inpName"],
+                'rol' => $_POST["inpRol"]
+            );
+
+            // 1.1. TEST
+            // $data['nom'] = "nombreTest";   
+			// $data['rol'] = "rolTest";      
+
+            // 2. Instanciem l'objecte real        
+            $objUser = new UserModel($fields);
+        
+            // 3. interactuar amb Model (mètode seu) per llegir/grabar
+            $objUser->save($fields);                    
+        }
+		
+        // 4. redireccionem cap a la pàgina de view que volguem
+        header('Location:' .ROOT_PATH.'/app/views/scripts/user/index.phtml');
+                
+        // 5. Tota funció ha de retornar quelcom (true = ha anat bé)
         return true;
     }
 
     // Funció per Eliminar
-    public function delete($id){
+    public function delAction($id){
         // Instanciem l'objecte real        
         $objUser = new UserModel();
             $data['nom'] = $_POST["inpName"];
@@ -31,15 +63,6 @@ class UserController extends ApplicationController
     }
     // Funció per Modificar - vista modif 
 
-    // Funció per Mostrar
-	public function indexAction(){
-        // instanciar l'objecte segons el Model
-        $objUser = new UserModel();
-        // executar el mètode de classe per retornar el cod=1
-        $data = $objUser->showAll("users","1");
-        $data = $objUser->showById("users","1");
-        require_once("/app/views/scripts/user/index.phtml");
-    }
 
     function proves(){
         // Instanciem l'objecte real - omplint Array d'Objectes per cada User 
