@@ -3,7 +3,7 @@
 
 echo "entrant a UserController... <br><br>";
 
-require_once ROOT_PATH . '/app/models/UserModel.php';
+require_once ROOT_PATH . ('/app/models/UserModel.php');
 
 
 class UserController extends ApplicationController
@@ -24,7 +24,10 @@ class UserController extends ApplicationController
 	}
 
     // Funció per Afegir
-    public function addAction(){
+    public function add(){
+    // public function addAction(){
+
+        echo "user addAction";
 
         if (!empty($_POST)) {
         
