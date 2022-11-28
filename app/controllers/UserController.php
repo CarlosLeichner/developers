@@ -24,10 +24,14 @@ class UserController extends ApplicationController
 	}
 
     // Funció per Afegir
-    public function add(){
-    // public function addAction(){
 
-        echo "user addAction";
+    // public function AddAction(){
+    public function addAction(){        
+    // public function add(){        
+    // public function Add(){           
+
+        // echo "entrando a user Add";
+        echo "entrando a user addAction";
 
         if (!empty($_POST)) {
         
