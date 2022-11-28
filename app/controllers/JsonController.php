@@ -22,7 +22,7 @@ class JsonController extends ApplicationController{
         $TaskObj = new JsonModel();
         $taskData = $TaskObj->getTasks();
         $taskData = $TaskObj->getTaskbyID($id);
-        require_once ('/app/views/scripts/task/index.html');
+        require_once ('/app/views/scripts/index.html');
     }
     function addAction($taskData){
         if ( !empty($_POST)) { 
@@ -47,7 +47,7 @@ class JsonController extends ApplicationController{
         if ($this->taskData){
             $this->TaskObj->createTask();
             return $this->TaskObj;
-            header('Location: ' . ROOT_PATH . '/app/views/scripts/task/index.phtml');
+            header('Location: ' . ROOT_PATH . '/app/views/scripts/index.phtml');
         }
         
     }
@@ -140,7 +140,7 @@ class JsonController extends ApplicationController{
                     
             }
         }
-        header('Location: ' . ROOT_PATH . '/app/views/scripts/task/index.phtml');
+        header('Location: ' . ROOT_PATH . '/app/views/scripts/index.phtml');
     }
     function delAction($id){
         if (!isset($_GET['id'])) {
@@ -158,7 +158,7 @@ class JsonController extends ApplicationController{
         }else {
             echo "task not found";
         }
-        header('Location: ' . ROOT_PATH . '/app/views/scripts/task/index.phtml');
+        header('Location: ' . ROOT_PATH . '/app/views/scripts/index.phtml');
     }
     
 }   
