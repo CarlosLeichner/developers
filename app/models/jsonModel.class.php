@@ -1,140 +1,175 @@
 <?php
 
+require_once ROOT_PATH . ('/lib/base/Model.php');
 
 
+class JsonModel extends Model{
 
-class JsonModel{
-
-    private $json_file ;
-    private $tasks;
-    private $number_of_records;
-    private $ids = [];
-    private $description;
-    private $created_at;
-    private $currentStatus;
-    private $masterUsr_id;
-    private $slaveUsr_id;
-    private $initiated;
-    private $done;
-    private $deleted;
+    // private $json_file ;
+    // private $tasks;
+    // private $number_of_records;
+    // private $ids = [];
+    // private $description;
+    // private $created_at;
+    // private $currentStatus;
+    // private $masterUsr_id;
+    // private $slaveUsr_id;
+    // private $initiated;
+    // private $done;
+    // private $deleted;
+    private $arrTask;
 
     public function __construct(){
-        $this->json_file =('db/tasks.json');
-        $this->tasks = json_decode(file_get_contents($this->json_file), true);
-        $this->number_of_records = count($this->tasks);
-        $this->created_at = date("Y-m-d H:i:s");
-        $this->initiated = date("Y-m-d H:i:s");
-        $this->done = date("Y-m-d H:i:s");
-        if($this->number_of_records != 0){
-            foreach ($this->tasks as $task) {
-                array_push($this->setTaskId, $task['id']);
-                array_push($this->tasks, $task["created_at"]);
-                array_push($this->tasks, $task["currentStatus"]);
-                array_push($this->tasks, $task["masterUsr_id"]);
-                array_push($this->tasks, $task["slaveUsr_id"]);
-                array_push($this->tasks, $task["initiated"]);
-                array_push($this->tasks, $task["done"]);
-                array_push($this->tasks, $task["deleted"]);
-
-            }
+        if (!file_exists(PHP_CONFIG_FILE_PATH. '/database/'. '-tasks.jason')) {
+            $tasks = $this->putJson();
+        }else {
+            $tasks = $this->getJson();
         }
+        
+        $this->arrTask = $tasks;
+        
     }
-    private function setTaskId(array $task){
-        if($this->number_of_records == 0){
-           $task['id'] = 1;
+    private function setTaskId(){
+        $number_of_records=0;
+        if($number_of_records == 0){
+           $arrTask['id'] = 1;
         }else{
-           $task['id'] = max($this->ids) + 1;
+           $arrTask['id'] = max($this->ids) + 1;
         }
-        return $task;
+        
     }
     function getTasks(){
-        return $this->tasks;
+        $this->arrTask = $this->putJson();
+        return $this->arrTask;
     }
-    function getTaskbyID($id){
-        $tasks= $this->getTasks();
-        foreach ($tasks as $task) {
-            if ($task['id'] == $id) {
-                return $task;
+    function getTaskbyID($id_task){
+        $tasks = $this->arrTask;
+        if (is_array($tasks)){
+            foreach ($tasks as $key =>$value) {
+                if ($value['id_task'] == $id_task) {
+                    return $tasks[$key];
+                }
             }
         }
-        return null;
+        
     }
     
-    public function createTask(array $new_task){
-        $taskWithId = $this->setTaskId($new_task);
-        array_push($this->tasks, $taskWithId);
+    public function createTask($arrTask){
+        $taskWithId = $this->setTaskId();
+        $tasks = $this->arrTask;
+        $tasks = $this->putJson();
    
-        /* task validation */
+        
         if($this->number_of_records == 0){
            $this->putJson();
         }else{
-            if(!in_array($new_task['currentStatus'], $this->currentStatus)){
+            if(!in_array($arrTask['currentStatus'], $this->currentStatus)){
                 $this->putJson();
             }
-            if(!in_array($new_task['masterUsr_id'], $this->masterUsr_id)){
+            if(!in_array($arrTask['masterUsr_id'], $this->masterUsr_id)){
                 $this->putJson();
             }
-            if(!in_array($new_task['slaveUsr_id'], $this->slaveUsr_id)){
+            if(!in_array($arrTask['slaveUsr_id'], $this->slaveUsr_id)){
                 $this->putJson();
             }
-            if(!in_array($new_task['deleted'], $this->deleted)){
+            if(!in_array($arrTask['deleted'], $this->deleted)){
                 $this->putJson();
             }
-            else{
-              return false;
-           }
-        }
+            
+        }return $tasks;
      }
-    function updateTask($id){
-        foreach($this->tasks as $task => $id){
-            if($task['id'] == $id){ 
-               $this->tasks[$task]['id'] = $id;
-                if ($id['id'] == $id){ 
-                    if(!empty($this->tasks) && is_array($this->tasks) && !empty($id)){ 
-                        if(isset($this->tasks['description'])){ 
-                            $this->tasks[$task]['description'] = $this->description; 
+    function updateTask($id_task){
+        $tasks = $this->arrTask;
+        if (is_array($tasks)){
+            foreach ($tasks as $key =>$value) {
+                if($value['id_task'] === $id_task){ 
+                $tasks[$value]['id_task'] = $id_task;
+                    if ($value['id_task'] === $id_task){ 
+                        if(!empty($tasks) && is_array($tasks) && !empty($id_task)){ 
+                            if(isset($tasks['description'])){ 
+                                $tasks[$key]['description'] = $this->description; 
+                                $this->putJson();
+                            } 
+                            if(isset($this->tasks['masterUsr_id'])){ 
+                                $this->tasks[$key]['masterUsr_id'] = $this->masterUsr_id;
+                                $this->putJson(); 
+                            } 
+                            if(isset($tasks['slaveUsr_id'])){ 
+                                $tasks[$key]['slaveUsr_id'] = $this->slaveUsr_id; 
+                                $this->putJson();
+                            } 
+                            if(isset($tasks['initiated'])){ 
+                                $tasks[$key]['initiated'] = $this->initiated; 
+                                $this->putJson();
+                            } 
+                            if(isset($tasks['done'])){ 
+                                $tasks[$key]['done'] = $this->done; 
+                                $this->putJson();
+                            } 
+                            if(isset($tasks['currentStatus'])){ 
+                                $tasks[$key]['currentStatus'] = $this->currentStatus; 
+                                $this->putJson();
+                            } 
+                            if(isset($tasks['deleted'])){ 
+                                $tasks[$key]['deleted'] = $this->deleted;
+                                $this->putJson(); 
+                            }
+                    
                         } 
-                        if(isset($this->tasks['masterUsr_id'])){ 
-                            $this->tasks[$task]['masterUsr_id'] = $this->masterUsr_id; 
-                        } 
-                        if(isset($this->tasks['slaveUsr_id'])){ 
-                            $this->tasks[$task]['slaveUsr_id'] = $this->slaveUsr_id; 
-                        } 
-                        if(isset($this->tasks['initiated'])){ 
-                            $this->tasks[$task]['initiated'] = $this->initiated; 
-                        } 
-                        if(isset($this->tasks['done'])){ 
-                            $this->tasks[$task]['done'] = $this->done; 
-                        } 
-                        if(isset($this->tasks['currentStatus'])){ 
-                            $this->tasks[$task]['currentStatus'] = $this->currentStatus; 
-                        } 
-                        if(isset($this->tasks['deleted'])){ 
-                            $this->tasks[$task]['deleted'] = $this->deleted; 
-                        }
-                 
-                    } 
-             
+                
+                    }
+                    return $tasks['id_task'];        
                 }
-                return $task;        
             }
         }
     }
 
-    function deleteTask($id){
-
-        foreach($this->tasks as $task => $value){
-            if($value['id'] == $id){
-               unset($this->tasks[$task]);
+    function deleteTask($id_task){
+        $tasks = $this->arrTask;
+        if (is_array($tasks)){
+            foreach ($tasks as $key =>$value) {
+                if ($value['id_task'] == $id_task) {
+                    $tasks[$key]['currentStatus'] = 'deleted';
+                }
             }
-         }
+            $this->putJson();
+        }
+    }
+    function initiatedTask($id_task){
+        $tasks = $this->arrTask;
+        if (is_array($tasks)){
+            foreach ($tasks as $key =>$value) {
+                if($value['id'] === $id_task){
+                $tasks[$key]['currentStatus'] = 'initiated';
+                $tasks[$key]['initiated'] = date("Y-m-d H:i:s");
+                }
+            }
+            $this->putJson();
+        }
+    }
+    function completedTask($id_task){
+        $tasks = $this->arrTask;
+        if (is_array($tasks)){
+            foreach ($tasks as $key =>$value) {
+                if($value['id'] === $id_task){
+                $tasks[$key]['currentStatus'] = 'completed';
+                $tasks[$key]['done'] = date("Y-m-d H:i:s");
+                }
+            }
          $this->putJson();
-      }
+        }
+    }
+    
     private function putJson()
     {
-        file_put_contents($this->json_file, json_encode($this->tasks, JSON_PRETTY_PRINT));
+    json_decode(file_put_contents(PHP_CONFIG_FILE_PATH. '-tasks.jason', [],JSON_PRETTY_PRINT));
+        
     }
-
+    private function getJson()
+    {
+    json_decode(file_get_contents(PHP_CONFIG_FILE_PATH. '/database/'. '-tasks.jason', true ,JSON_PRETTY_PRINT));
+        
+    }
 }
 
 
