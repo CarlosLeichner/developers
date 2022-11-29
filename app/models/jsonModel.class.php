@@ -1,9 +1,9 @@
 <?php
 
+require_once ROOT_PATH . ('/lib/base/Model.php');
 
 
-
-class JsonModel{
+class JsonModel extends Model{
 
     private $json_file ;
     private $tasks;
@@ -25,19 +25,8 @@ class JsonModel{
         $this->created_at = date("Y-m-d H:i:s");
         $this->initiated = date("Y-m-d H:i:s");
         $this->done = date("Y-m-d H:i:s");
-        if($this->number_of_records != 0){
-            foreach ($this->tasks as $task) {
-                array_push($this->setTaskId, $task['id']);
-                array_push($this->tasks, $task["created_at"]);
-                array_push($this->tasks, $task["currentStatus"]);
-                array_push($this->tasks, $task["masterUsr_id"]);
-                array_push($this->tasks, $task["slaveUsr_id"]);
-                array_push($this->tasks, $task["initiated"]);
-                array_push($this->tasks, $task["done"]);
-                array_push($this->tasks, $task["deleted"]);
-
-            }
-        }
+        
+        
     }
     private function setTaskId(array $task){
         if($this->number_of_records == 0){
@@ -50,11 +39,11 @@ class JsonModel{
     function getTasks(){
         return $this->tasks;
     }
-    function getTaskbyID($id){
-        $tasks= $this->getTasks();
+    function getTaskbyID($id_task){
+        $tasks= $this->tasks;
         foreach ($tasks as $task) {
-            if ($task['id'] == $id) {
-                return $task;
+            if ($task['id_task'] == $id_task) {
+                return $tasks[$task];
             }
         }
         return null;
@@ -64,7 +53,7 @@ class JsonModel{
         $taskWithId = $this->setTaskId($new_task);
         array_push($this->tasks, $taskWithId);
    
-        /* task validation */
+        
         if($this->number_of_records == 0){
            $this->putJson();
         }else{
@@ -80,56 +69,82 @@ class JsonModel{
             if(!in_array($new_task['deleted'], $this->deleted)){
                 $this->putJson();
             }
-            else{
-              return false;
-           }
+            
         }
      }
-    function updateTask($id){
-        foreach($this->tasks as $task => $id){
-            if($task['id'] == $id){ 
-               $this->tasks[$task]['id'] = $id;
-                if ($id['id'] == $id){ 
+    function updateTask($id_task){
+        foreach($this->tasks as $key => $value){
+            if($value['id_task'] === $id_task){ 
+               $this->tasks[$value]['id_task'] = $id_task;
+                if ($value['id_task'] === $id_task){ 
                     if(!empty($this->tasks) && is_array($this->tasks) && !empty($id)){ 
                         if(isset($this->tasks['description'])){ 
-                            $this->tasks[$task]['description'] = $this->description; 
+                            $this->tasks[$key]['description'] = $this->description; 
+                            $this->putJson();
                         } 
                         if(isset($this->tasks['masterUsr_id'])){ 
-                            $this->tasks[$task]['masterUsr_id'] = $this->masterUsr_id; 
+                            $this->tasks[$key]['masterUsr_id'] = $this->masterUsr_id;
+                            $this->putJson(); 
                         } 
                         if(isset($this->tasks['slaveUsr_id'])){ 
-                            $this->tasks[$task]['slaveUsr_id'] = $this->slaveUsr_id; 
+                            $this->tasks[$key]['slaveUsr_id'] = $this->slaveUsr_id; 
+                            $this->putJson();
                         } 
                         if(isset($this->tasks['initiated'])){ 
-                            $this->tasks[$task]['initiated'] = $this->initiated; 
+                            $this->tasks[$key]['initiated'] = $this->initiated; 
+                            $this->putJson();
                         } 
                         if(isset($this->tasks['done'])){ 
-                            $this->tasks[$task]['done'] = $this->done; 
+                            $this->tasks[$key]['done'] = $this->done; 
+                            $this->putJson();
                         } 
                         if(isset($this->tasks['currentStatus'])){ 
-                            $this->tasks[$task]['currentStatus'] = $this->currentStatus; 
+                            $this->tasks[$key]['currentStatus'] = $this->currentStatus; 
+                            $this->putJson();
                         } 
                         if(isset($this->tasks['deleted'])){ 
-                            $this->tasks[$task]['deleted'] = $this->deleted; 
+                            $this->tasks[$key]['deleted'] = $this->deleted;
+                            $this->putJson(); 
                         }
                  
                     } 
              
                 }
-                return $task;        
+                return $this->tasks['id_task'];        
             }
         }
     }
 
-    function deleteTask($id){
-
-        foreach($this->tasks as $task => $value){
-            if($value['id'] == $id){
-               unset($this->tasks[$task]);
+    function deleteTask($id_task){
+        $tasks = $this->tasks;
+        foreach($tasks as $key => $value){
+            if($value['id'] === $id_task){
+               $tasks[$key]['currentStatus'] = 'deleted';
             }
          }
          $this->putJson();
-      }
+    }
+    function initiatedTask($id_task){
+        $tasks = $this->tasks;
+        foreach($tasks as $key => $value){
+            if($value['id'] === $id_task){
+               $tasks[$key]['currentStatus'] = 'initiated';
+               $tasks[$key]['initiated'] = $this->initiated;
+            }
+         }
+         $this->putJson();
+    }
+    function completedTask($id_task){
+        $tasks = $this->tasks;
+        foreach($tasks as $key => $value){
+            if($value['id'] === $id_task){
+               $tasks[$key]['currentStatus'] = 'completed';
+               $tasks[$key]['done'] = $this->done;
+            }
+         }
+         $this->putJson();
+    }
+    
     private function putJson()
     {
         file_put_contents($this->json_file, json_encode($this->tasks, JSON_PRETTY_PRINT));

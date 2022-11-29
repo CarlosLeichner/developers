@@ -1,12 +1,14 @@
 <?php
 session_start();
-require __DIR__.'db/tasks.json';
-require_once ROOT_PATH . '/app/models/jsonModel.class.php';
+//require (__FILE__. ('/db/tasks.json'));
+require_once ROOT_PATH . ('/app/models/jsonModel.class.php');
 
-$redirectURL = ('web/index.php'); 
-class JsonController extends ApplicationController{
-    protected $taskData;
+
+class JsonController extends Controller{
+    public $taskData;
     function __contruct (){
+        
+        
         $this->taskData = array( 
             'description' => $this->description, 
             'created_at' => $this->created_at, 
@@ -18,13 +20,20 @@ class JsonController extends ApplicationController{
             'deleted'=> $this->deleted
         ); 
     }
-    public function indexAction($id){
+    public function indexAction($id_task){
+        if (!isset($_GET['id_task'])) {
+            echo "not found";
+            exit;
+        }
+        
         $TaskObj = new JsonModel();
-        $taskData = $TaskObj->getTasks();
-        $taskData = $TaskObj->getTaskbyID($id);
+        $this->taskData = $TaskObj->getTasks();
+        $this->taskData = $TaskObj->getTaskbyID($id_task);
         require_once ('/app/views/scripts/index.html');
     }
     function addAction($taskData){
+        echo "actiondeleted";
+        exit;
         if ( !empty($_POST)) { 
             $data = file_get_contents('db/tasks.json');
             $data = json_decode($data, true);
@@ -51,16 +60,18 @@ class JsonController extends ApplicationController{
         }
         
     }
-    function editAction($id){
-        if (!isset($_GET['id'])) {
+    function editAction($id_task){
+        echo "actiondeleted";
+        exit;
+        if (!isset($_GET['id_task'])) {
             echo "not found";
             exit;
         }
         $TaskObj = new JsonModel();
-        $taskId = $_GET['id'];
-        $data = file_get_contents('users.json');
+        $taskId = $_GET['id_task'];
+        $data = file_get_contents('tasks.json');
         $task = json_decode($data, true);
-        $task =  $TaskObj->getTaskbyID($id);
+        $task =  $TaskObj->getTaskbyID($id_task);
         if (!$task) {
             echo "not found";
             exit;
@@ -76,7 +87,7 @@ class JsonController extends ApplicationController{
             'done'=> $_POST ['done'],
             'deleted'=> $_POST ['deleted']
             );
-        $TaskObj->updateTask($id);
+        $TaskObj->updateTask($id_task);
         $task[$taskId] = $taskData;
     
         $data = json_encode($this->taskData, JSON_PRETTY_PRINT);
@@ -85,7 +96,7 @@ class JsonController extends ApplicationController{
 
         if(isset($_POST['taskSubmit'])){ 
             // Get form fields value 
-            $id = $_POST['id']; 
+            $id_task = $_POST['id_task']; 
             $description = trim(strip_tags($_POST['description'])); 
             $created_at = trim(strip_tags($_POST['created_at'])); 
             $currentStatus = trim(strip_tags($_POST['currentStatus'])); 
@@ -93,8 +104,8 @@ class JsonController extends ApplicationController{
             $slaveUsr_id = trim(strip_tags($_POST['slaveUsr_id'])); 
 
             $id_str = ''; 
-            if(!empty($id)){ 
-                $id_str = '?id='.$id; 
+            if(!empty($id_task)){ 
+                $id_str = '?id_task='.$id_task; 
             } 
             
             //  validation 
@@ -121,9 +132,9 @@ class JsonController extends ApplicationController{
         $sessData['taskData'] = $taskData; 
         // Submit the form data 
         if(empty($errorMsg)){ 
-            if(!empty($_POST['id'])){ 
+            if(!empty($_POST['id_task'])){ 
                 // Update task data 
-                $update = $TaskObj->updateTask($id); 
+                $update = $TaskObj->updateTask($id_task); 
                 
                 if($update){ 
                     $sessData['status']['type'] = 'success'; 
@@ -142,8 +153,10 @@ class JsonController extends ApplicationController{
         }
         header('Location: ' . ROOT_PATH . '/app/views/scripts/index.phtml');
     }
-    function delAction($id){
-        if (!isset($_GET['id'])) {
+    function delAction($id_task){
+        echo "actiondeleted";
+        exit;
+        if (!isset($_GET['id_task'])) {
             echo "not found";
             exit;
         }else {
@@ -151,10 +164,10 @@ class JsonController extends ApplicationController{
             
             $data = file_get_contents('tasks.json');
             $task = json_decode($data, true);
-            $task =  $TaskObj->getTaskbyID($id);
+            $task =  $TaskObj->getTaskbyID($id_task);
         }
         if (!empty($task)) {
-            $TaskObj->deleteTask($id);
+            $TaskObj->deleteTask($id_task);
         }else {
             echo "task not found";
         }

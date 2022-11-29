@@ -9,7 +9,7 @@
         "currentStatus": "done",
         "deleted": "false",
 
-        "description" : "Estudiar Tailwind",
+        "description" : "Estudiar Tailwind"
 
     },
     {
@@ -22,7 +22,7 @@
         "currentStatus": "pending",
         "deleted": "false",
 
-        "description" : "Estudiar Laravel",
+        "description" : "Estudiar Laravel"
   
     },
     {
@@ -35,9 +35,7 @@
         "currentStatus": "in_progress",
         "deleted": "false",
 
-        "description" : "Estudiar MongoDB",
-        
-
+        "description" : "Estudiar MongoDB"
 
     }
 ]

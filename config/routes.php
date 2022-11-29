@@ -15,6 +15,7 @@ $routes = array(
 	'/test'  => 'test#index',
 	'/test2' => 'test2#index',
 	'/check' => 'test#check',
+	'/check2' => 'test2#check',
 
 	// rutes per taula USERS
 	'/listuser' => 'user#index',
@@ -23,9 +24,9 @@ $routes = array(
 	'/deluser'  => 'user#del',
 
 	// rutes per taula TASKS
-	'/listtask'      => 'jsonModel#index',
-	'/addtask'  => 'jsonModel#add',
-	'/edittask' => 'jsonModel#edit',
-	'/deltask'  => 'jsonModel#del'
+	'/listtask'      => 'json#index',
+	'/addtask'  => 'json#add',
+	'/edittask' => 'json#edit',
+	'/deltask'  => 'json#del'
 	
 );
