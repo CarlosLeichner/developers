@@ -27,6 +27,7 @@ $routes = array(
 	'/listtask'      => 'json#index',
 	'/addtask'  => 'json#add',
 	'/edittask' => 'json#edit',
-	'/deltask'  => 'json#del'
+	'/deltask'  => 'json#del',
+	'/viewtask' => 'json#view'
 	
 );
