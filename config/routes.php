@@ -24,10 +24,11 @@ $routes = array(
 	'/deluser'  => 'user#del',
 
 	// rutes per taula TASKS
-	'/listtask'      => 'json#index',
-	'/addtask'  => 'json#add',
-	'/edittask' => 'json#edit',
-	'/deltask'  => 'json#del',
-	'/viewtask' => 'json#view'
+	'/listtask' => 'task#index',
+	'/addtask'  => 'task#add',
+	'/edittask' => 'task#edit',
+	'/deltask'  => 'task#del',
+	'/viewtask' => 'task#view',
+	'/searchtask' => 'task#search'
 	
 );
