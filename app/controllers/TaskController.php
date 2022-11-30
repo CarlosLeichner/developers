@@ -151,7 +151,16 @@ class TaskController extends ApplicationController{
         //}
     
     
+    }public function searchAction(){
+        $id_task = $_GET['id_task'];
+ 
+        $TaskObj = new JsonModel();
+
+        $TaskObj->getTaskbyID($id_task);
+        
     }
+    
+    
 }   
 
 ?>

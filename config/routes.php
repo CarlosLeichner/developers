@@ -13,9 +13,7 @@ $routes = array(
 
 	// rutes de Proves
 	'/test'  => 'test#index',
-	'/test2' => 'test2#index',
 	'/check' => 'test#check',
-	'/check2' => 'test2#check',
 
 	// rutes per taula USERS
 	'/'         => 'user#index',
@@ -26,7 +24,7 @@ $routes = array(
 	'/deluser'  => 'user#del',
 
 	// rutes per taula TASKS
-	'/listtask' => 'json#index',
+	'/listtask' => 'task#index',
 	'/addtask'  => 'task#add',
 	'/edittask' => 'task#edit',
 	'/deltask'  => 'task#del',

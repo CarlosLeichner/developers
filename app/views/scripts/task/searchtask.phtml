@@ -31,20 +31,22 @@
           
 
         </label>
-        <!-- ... -->
-    </form>
-      
-    <madre method = "POST" class="flex justify-center space-x-4 ">
+          <madre  class="flex justify-center space-x-4 ">
+            <button class=" bg-sky-500 px-3 hover:bg-green-700 ...">
+          <a href="/viewtask?id_task=<?php  echo ["id_task"] ?>">Continue</a>
+          </button>
 
-        <button class=" bg-sky-500 px-3 hover:bg-green-700 ...">
-         <a href="/edittask">Continue</a>
+        <button class=" bg-sky-500 px-3 hover:bg-red-700 ...">
+          <a href="scripts/index.phtml">Cancel</a>
+        </madre>
         </button>
 
-       <button class=" bg-sky-500 px-3 hover:bg-red-700 ...">
-        <a href="scripts/index.phtml">Cancel</a>
-       </button>
+    </form>
+      
+    
 
-   </madre>
+        
+   
 
    <footer class="mt-1  px-3 py-2">
     <p class="font-extrabold text-2xl bg-blue-400 text-center"><b>IT Academy (itinerari LAMP) - Cibernàrium de BcnActiva - 2022</b></p>
