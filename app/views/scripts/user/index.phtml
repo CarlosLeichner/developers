@@ -13,33 +13,23 @@
     <nav class="flex justify-center space-x-4">
         
         
-        <a href="/C:/Users/gfarr/Documents/GitHub/PHP_Basics/developers/proba_tailwind/index_proba.html" class="font-bold px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">Create User</a>
+        <a href="listuser" class="font-bold px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">Users</a>
         
       </nav>
     
     
-      <form class="flex flex-col justify-center p-10" method="POST">
+      <form method = "POST" class="flex justify-center p-10">
         
-
-          <!-- <span class=" block text-sm font-medium text-slate-700">ID User:</span>
-          
-          <input type="text" value="" name="inpId" class="mt-1  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
-            focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
-            disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
-            invalid:border-pink-500 invalid:text-pink-600
-            focus:invalid:border-pink-500 focus:invalid:ring-pink-500
-          "/> -->
-          
-          <label class=" block text-sm font-medium text-slate-700">Name:</label>
+      <label class="block">
+          <span class=" block text-sm font-medium text-slate-700">Username:</span>
           <!-- Using form state modifers, the classes can be identical for every input -->
-          <input type="text" value="" name="inpName" class="mt-1  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
+          <input type="text" value="" name ="inpName" class="mt-1  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
             disabled:bg-slate-50 disabled:text-slate-500 disabled:border-slate-200 disabled:shadow-none
             invalid:border-pink-500 invalid:text-pink-600
             focus:invalid:border-pink-500 focus:invalid:ring-pink-500
           "/>
-          
-          <label class=" block text-sm font-medium text-slate-700">Rol:</label>
+          <span class=" block text-sm font-medium text-slate-700">Rol:</span>
           <!-- Using form state modifers, the classes can be identical for every input -->
           <input type="text" value="" name="inpRol" class="mt-1  px-3 py-2 bg-white border border-slate-300 rounded-md text-sm shadow-sm placeholder-slate-400
             focus:outline-none focus:border-sky-500 focus:ring-1 focus:ring-sky-500
@@ -48,35 +38,34 @@
             focus:invalid:border-pink-500 focus:invalid:ring-pink-500
           "/>
 
-        <madre class="flex justify-center space-x-4 "> 
-            <input value="ENTRAR" id="btnEntrar" name="btnEntrar" type="submit" class=" bg-sky-500 px-3 hover:bg-green-700 ...">  
-        </madre>          
 
+        </label>
         
-        <!-- <input id="btnGrabar" type="button" class=" bg-sky-500 px-3 hover:bg-green-700 ...">
-        <input id="btnCancel" type="button" class=" bg-sky-500 px-3 hover:bg-red-700 ..."> -->
-        
-        <!-- ... -->
     </form>
-      
-    <!-- <madre class="flex justify-center space-x-4 ">
+    
+    <madre method = "Post" class="flex justify-center space-x-4 ">
 
-        <button class=" bg-sky-500 px-3 hover:bg-green-700 ...">
-         <a href='../../../../web/adduser'>GRABAR</a>
-        </button>
+          <button value="" id="btnEntrar" name="btnEntrar" type="submit"  class="flex justify-center space-x-4 bg-sky-500 px-3 hover:bg-green-700 ">
+            <a href="listtask">Continue</a>
+          </button>
 
-       <button class=" bg-sky-500 px-3 hover:bg-red-700 ...">
-        <a href="/C:/Users/gfarr/Documents/GitHub/PHP_Basics/developers/proba_tailwind/index_proba.html">Cancel</a>
-       </button>
+          <button value="" id="btncancel" name="btncancel" type="submit" class="flex justify-center space-x-4 bg-sky-500 px-3 hover:bg-red-700 ...">
+            <a href="listuser">Cancel</a>
+          </button>
 
-   </madre> -->
-
-   <footer class="mt-1  px-3 py-2">
-    <p class="font-extrabold text-2xl bg-blue-400 text-center"><b>IT Academy (itinerari LAMP) - Cibernàrium de BcnActiva - 2022</b></p>
-  </footer>
+    </madre>
     
       
-      
+      <padre method = "POST"  class="flex flex-center m-4">
 
+         <a href="adduser" class=" flex-wrap bg-clip-border p-6 border-8 border-black group block max-w-xs mx-auto rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
+            <div class="flex items-center space-x-3">
+            <svg class=" h-6 w-6 stroke-sky-500 group-hover:stroke-white" fill="none" viewBox="0 0 24 24"><!-- ... --></svg>
+            <h3 class=" text-slate-900 group-hover:text-white text-sm font-semibold">Create user.</h3>
+            </div>
+            <p class="text-slate-500 group-hover:text-white text-sm">Create a new user from a work a task.</p>
+        </a>
+
+      
 </body>
 </html>
