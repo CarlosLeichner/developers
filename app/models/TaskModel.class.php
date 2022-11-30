@@ -3,22 +3,21 @@
 require_once ROOT_PATH . ('/lib/base/Model.php');
 
 
-class JsonModel extends Model{
+class Task {
 
-    // private $json_file ;
-    // private $tasks;
-    // private $number_of_records;
-    // private $ids = [];
-    // private $description;
-    // private $created_at;
-    // private $currentStatus;
-    // private $masterUsr_id;
-    // private $slaveUsr_id;
-    // private $initiated;
-    // private $done;
-    // private $deleted;
-    private $arrTask;
-
+    
+    private $arrTask = array (
+        'id_task' => '0',
+        'created_at' => '',
+        'description' => '',
+        'currentStatus' => 'created',
+        'done' => '',
+        'initialized' => '',
+        'deleted' => '',
+        'masterUsr_id'=>'',
+        'slaveUsr_id'=>''
+    );
+    
     public function __construct(){
         if (!file_exists(PHP_CONFIG_FILE_PATH. '/database/'. '-tasks.jason')) {
             $tasks = $this->putJson();
@@ -28,13 +27,14 @@ class JsonModel extends Model{
         
         $this->arrTask = $tasks;
         
+        
     }
     private function setTaskId(){
-        $number_of_records=0;
-        if($number_of_records == 0){
-           $arrTask['id'] = 1;
+        
+        if($this->arrTask['id_task']===0){
+            $this->arrTask['id_task'] = 1;
         }else{
-           $arrTask['id'] = max($this->ids) + 1;
+           $arrTask['id_task'] = max($this->arrTask) + 1;
         }
         
     }
@@ -43,7 +43,7 @@ class JsonModel extends Model{
         return $this->arrTask;
     }
     function getTaskbyID($id_task){
-        echo $id_task;
+        
         $tasks = $this->arrTask;
         echo $tasks;
         if (is_array($tasks)){
@@ -57,31 +57,43 @@ class JsonModel extends Model{
         
     }
     
-    public function createTask($arrTask){
+    public function createTask($slaveUsr_id, $masterUsr_id, $description ,$created_at, $initiated, $done, $deleted, $currentStatus){
         $taskWithId = $this->setTaskId();
         $tasks = $this->arrTask;
         $tasks = $this->putJson();
    
         
-        if($this->number_of_records == 0){
+        if($this->arrTask['id_task']===0){
            $this->putJson();
         }else{
-            if(!in_array($arrTask['currentStatus'], $this->currentStatus)){
+            if(!in_array($this->arrTask['currentStatus'], $currentStatus)){
                 $this->putJson();
             }
-            if(!in_array($arrTask['masterUsr_id'], $this->masterUsr_id)){
+            if(!in_array($this->arrTask['initiated'], $initiated)){
                 $this->putJson();
             }
-            if(!in_array($arrTask['slaveUsr_id'], $this->slaveUsr_id)){
+            if(!in_array($this->arrTask['created_at'], $created_at)){
                 $this->putJson();
             }
-            if(!in_array($arrTask['deleted'], $this->deleted)){
+            if(!in_array($this->arrTask['description'], $description)){
+                $this->putJson();
+            }
+            if(!in_array($this->arrTask['done'], $done)){
+                $this->putJson();
+            }
+            if(!in_array($this->arrTask['masterUsr_id'], $masterUsr_id)){
+                $this->putJson();
+            }
+            if(!in_array($this->arrTask['slaveUsr_id'], $slaveUsr_id)){
+                $this->putJson();
+            }
+            if(!in_array($this->arrTask['deleted'], $deleted)){
                 $this->putJson();
             }
             
         }return $tasks;
-     }
-    function updateTask($id_task){
+    }
+    public function updateTask($id_task){
         $tasks = $this->arrTask;
         if (is_array($tasks)){
             foreach ($tasks as $key =>$value) {
@@ -90,31 +102,24 @@ class JsonModel extends Model{
                     if ($value['id_task'] === $id_task){ 
                         if(!empty($tasks) && is_array($tasks) && !empty($id_task)){ 
                             if(isset($tasks['description'])){ 
-                                $tasks[$key]['description'] = $this->description; 
+                                $tasks[$key]['description'] = 'description'; 
                                 $this->putJson();
                             } 
-                            if(isset($this->tasks['masterUsr_id'])){ 
-                                $this->tasks[$key]['masterUsr_id'] = $this->masterUsr_id;
-                                $this->putJson(); 
-                            } 
-                            if(isset($tasks['slaveUsr_id'])){ 
-                                $tasks[$key]['slaveUsr_id'] = $this->slaveUsr_id; 
-                                $this->putJson();
-                            } 
+                            
                             if(isset($tasks['initiated'])){ 
-                                $tasks[$key]['initiated'] = $this->initiated; 
+                                $tasks[$key]['initiated'] = 'initiated'; 
                                 $this->putJson();
                             } 
                             if(isset($tasks['done'])){ 
-                                $tasks[$key]['done'] = $this->done; 
+                                $tasks[$key]['done'] = 'done'; 
                                 $this->putJson();
                             } 
                             if(isset($tasks['currentStatus'])){ 
-                                $tasks[$key]['currentStatus'] = $this->currentStatus; 
+                                $tasks[$key]['currentStatus'] = 'currentStatus'; 
                                 $this->putJson();
                             } 
                             if(isset($tasks['deleted'])){ 
-                                $tasks[$key]['deleted'] = $this->deleted;
+                                $tasks[$key]['deleted'] = 'deleted';
                                 $this->putJson(); 
                             }
                     
@@ -127,18 +132,19 @@ class JsonModel extends Model{
         }
     }
 
-    function deleteTask($id_task){
+    public function deleteTask($id_task){
         $tasks = $this->arrTask;
         if (is_array($tasks)){
             foreach ($tasks as $key =>$value) {
                 if ($value['id_task'] == $id_task) {
                     $tasks[$key]['currentStatus'] = 'deleted';
+                    $tasks[$key]['deleted'] = true;
                 }
             }
             $this->putJson();
         }
     }
-    function initiatedTask($id_task){
+    public function initiatedTask($id_task){
         $tasks = $this->arrTask;
         if (is_array($tasks)){
             foreach ($tasks as $key =>$value) {
@@ -150,7 +156,7 @@ class JsonModel extends Model{
             $this->putJson();
         }
     }
-    function completedTask($id_task){
+    public function completedTask($id_task){
         $tasks = $this->arrTask;
         if (is_array($tasks)){
             foreach ($tasks as $key =>$value) {
@@ -161,6 +167,15 @@ class JsonModel extends Model{
             }
          $this->putJson();
         }
+    }
+    public function viewTask($id_Task){
+        $tasks = $this->arrTask;
+        if (!$tasks) {
+            return false;
+        } else if ($tasks['id_Task']=== $id_Task) {
+            return $tasks;
+        }
+        
     }
     
     private function putJson()

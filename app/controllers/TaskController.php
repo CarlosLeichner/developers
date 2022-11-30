@@ -1,71 +1,66 @@
 <?php 
 
- session_start();
 
-// define('ROOT_PATH', '/app/models/taskModel.class.php');
-  require_once ROOT_PATH . ('/app/models/taskModel.class.php');    
+// require_once ('../models/TaskModel.class.php'); 
 
-class TaskController extends ApplicationController{
+class TaskController extends Controller{
 
     public function indexAction(){        
-    
-            echo "not found";
-            
-            
-        
-        
-        $TaskObj = new JsonModel();
-        $this->taskData = $TaskObj->getTasks();
-        //$this->taskData = $TaskObj->getTaskbyID($id_task);
+        $user= $_SESSION['user'];
+           
+        $TaskObj = new Task();
+        $tasks = $TaskObj->getTasks();
+     
         
     }
     public function addAction(){
-        $TaskObj = new JsonModel();
+        $user= $_SESSION['user'];
+        $TaskObj = new Task();
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ( !empty($_POST)) { 
                 
                 $taskData = array (
                     
-                        'description' => $_POST ['description'], 
-                        'created_at' => $_POST ['created_at'], 
-                        'currentStatus' => $_POST ['currentStatus'], 
-                        'masterUsr_id' => $_POST ['masterUsr_id'],
-                        'slaveUsr_id' =>  $_POST ['slaveUsr_id'],
-                        'initiated'=> $_POST ['initiated'],
-                        'done'=> $_POST ['done'],
-                        'deleted'=> $_POST ['deleted']
+                    $description = $_POST ['description'], 
+                    $created_at = $_POST ['created_at'], 
+                    $currentStatus = $_POST ['currentStatus'], 
+                    $masterUsr_id = $_POST ['masterUsr_id'],
+                    $slaveUsr_id =  $_POST ['slaveUsr_id'],
+                    $initiated =  $_POST ['initiated'],
+                    $done = $_POST ['done'],
+                    $deleted = $_POST ['deleted']
                 );
                 
-                $TaskObj->createTask($taskData);
+                $TaskObj->createTask($slaveUsr_id, $masterUsr_id, $description ,$created_at, $initiated, $done, $deleted, $currentStatus);
             }
             if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $data = array_merge($taskData, $_POST);}
             if ($data){
-                $TaskObj->createTask($data);
+                $TaskObj->createTask($$slaveUsr_id, $masterUsr_id, $description ,$created_at, $initiated, $done, $deleted, $currentStatus);
                 return $TaskObj;
-                header('Location: ' . ROOT_PATH . '../web/index');
+                header('Location: listtask');
             }
         }
     }
     public function editAction(){
         $id_task = $_GET['id_task'];
-        $TaskObj = new JsonModel();
+        $TaskObj = new Task();
         $TaskObj->getTaskbyID($id_task);
         if ($_SERVER['REQUEST_METHOD'] == 'GET') {
 
             if(isset($_GET['id_task'])){
-                if ($_GET['id_task']=== 1) {
+                if ($_GET['id_task']=== $id_task) {
                 $taskData = array(
 
-                    'description' => $_POST ['description'], 
-                    'created_at' => $_POST ['created_at'], 
-                    'currentStatus' => $_POST ['currentStatus'], 
-                    'masterUsr_id' => $_POST ['masterUsr_id'],
-                    'slaveUsr_id' =>  $_POST ['slaveUsr_id'],
-                    'initiated'=> $_POST ['initiated'],
-                    'done'=> $_POST ['done'],
-                    'deleted'=> $_POST ['deleted']
+                    $description = $_POST ['description'], 
+                    $created_at = $_POST ['created_at'], 
+                    $currentStatus = $_POST ['currentStatus'], 
+                    $masterUsr_id = $_POST ['masterUsr_id'],
+                    $slaveUsr_id =  $_POST ['slaveUsr_id'],
+                    $initiated =  $_POST ['initiated'],
+                    $done = $_POST ['done'],
+                    $deleted = $_POST ['deleted']
                     );}
                     
             $TaskObj->updateTask($id_task);
@@ -129,7 +124,7 @@ class TaskController extends ApplicationController{
             echo "not found";
             exit;
         }else {
-            $TaskObj = new JsonModel();
+            $TaskObj = new Task();
 
             $TaskObj->getTaskbyID($id_task);
         }
@@ -145,7 +140,7 @@ class TaskController extends ApplicationController{
    //         echo "not found";
      //       exit;
        // }else {
-            $TaskObj = new JsonModel();
+            $TaskObj = new Task();
 
             $TaskObj->getTaskbyID($id_task);
         //}
@@ -154,7 +149,7 @@ class TaskController extends ApplicationController{
     }public function searchAction(){
         $id_task = $_GET['id_task'];
  
-        $TaskObj = new JsonModel();
+        $TaskObj = new Task();
 
         $TaskObj->getTaskbyID($id_task);
         
