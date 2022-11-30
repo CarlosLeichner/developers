@@ -18,13 +18,15 @@ $routes = array(
 	'/check2' => 'test2#check',
 
 	// rutes per taula USERS
-	'/listuser' => 'user#index',
+	'/'         => 'user#index',
+	'/index'    => 'user#index',
+	// '/listuser' => 'user#index',
 	'/adduser'  => 'user#add',
 	'/edituser' => 'user#edit',   // 'UserController.php?id=3' ... rebrà per GET la ID ... function editAction($_GET[id])
 	'/deluser'  => 'user#del',
 
 	// rutes per taula TASKS
-	'/listtask' => 'task#index',
+	'/listtask' => 'json#index',
 	'/addtask'  => 'task#add',
 	'/edittask' => 'task#edit',
 	'/deltask'  => 'task#del',

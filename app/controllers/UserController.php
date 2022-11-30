@@ -1,33 +1,46 @@
 <?php
 
-
 echo "entrant a UserController... <br><br>";
 
 require_once ROOT_PATH . ('/app/models/UserModel.php');
-
 
 class UserController extends ApplicationController
 {    
     // LANDING - Funció per Mostrar
 	public function indexAction(){
-        // instanciar l'objecte segons el Model
-        $objUser = new UserModel();
-        // executar el mètode de classe per retornar el cod=1
-        $data = $objUser->showAll("users","1");
-        $data = $objUser->showById("users","1");
-        require_once("/app/views/scripts/user/index.phtml");
+        
+
+        echo "estoy en indexAction!!";        
+        // vista
+        // require_once ROOT_PATH . ("/app/views/scripts/user/index.phtml");
+        
+        if (isset($_POST['inpName'])){
+
+            // echo "estoy en IF de btnEntrar <br><br>";            
+            $fields = array(
+                'nom' => $_POST["inpName"],
+                'rol' => $_POST["inpRol"]
+            );        
+            // var_dump($fields);                        
+            $objUser = new UserModel($fields);       
+            // echo "var_dump de controller<br>";
+            // var_dump($objUser);
+
+            // obrim sessió perquè no dupliqui gent
+            if (!isset($_SESSION)){
+                session_start();
+            }            
+            header("Location: " . "/listtask");
+        }                
     }
 
-    public function indexOldAction()
-	{
-		$this->view->message = "hello from user::index";
-	}
+    public function addAction(){                
+        
+        // header('Location:' .ROOT_PATH.'/app/views/scripts/user/index.phtml');
 
-    // Funció per Afegir
-    public function add(){
-    // public function addAction(){
-
-        echo "user addAction";
+        // echo "entrando a user Add";
+        echo "entrando a user addAction <br> <br>";
+        exit;
 
         if (!empty($_POST)) {
         
@@ -45,7 +58,7 @@ class UserController extends ApplicationController
             $objUser = new UserModel($fields);
         
             // 3. interactuar amb Model (mètode seu) per llegir/grabar
-            $objUser->save($fields);                    
+                               
         }
 		
         // 4. redireccionem cap a la pàgina de view que volguem

@@ -13,19 +13,29 @@ class UserModel {
     );
 
     // utilizar una función existente que ya lo convierte en un Array asociativo automáticamente
+    
+    // private int $_id_User = 0;
+    // private string $_strCreatedAt = "";
+    // private string $_strName = "";
+    // private string $_strRol = "";
+    // private int $_deleted = 0;
 
     // CONSTRUCTOR  - no tengo claro si hacer count($_arrUsers) desde el Controller y pasarle el argumento id+1 
     // public function __construct($path_json_file){
         public function __construct($arrFields){
-            $jsnUsers = file_get_contents($this->_jsonFile);
-            $arrUsers = json_decode($jsnUsers, true); 
-
             
+            if (!file_exists(ROOT_PATH . "/db/users.json")){
+                $this->_jsonFile = file_put_contents(ROOT_PATH . "/db/users.json","[]");
+            }
+            $jsnUsers = file_get_contents($this->_jsonFile);
+            $arrUsers = json_decode($jsnUsers, true);             
+
+            echo "var_dump de model<br>";
             var_dump($arrFields);
 
         // $this->_jsonFile = $pathJsonFile;
         $this->_fields=array(
-            'id_user' => getMaxId(),
+            'id_user' => $this->getMaxId(),
             'strCreatedAt' => date("Y-m-d H:i:s"),
             'strName' => $arrFields['nom'],
             'strRol'  => $arrFields['rol'],
@@ -34,9 +44,19 @@ class UserModel {
         $this->saveJson($arrUsers,$this->_fields);      
     }
 
+    public function saveJson($arrUsers, array $arrFields){
+
+        $result = false;
+        if (!empty($arrFields)){            
+            array_push($arrUsers, $arrFields);            
+            $result = file_put_contents($this->_jsonFile, json_encode($arrUsers));
+        }
+        return $result? true : false;                
+    }
+
     // GETTERS-SETTERS - deberán ser privados
     private function getFields(){
-        return $this->_arrFields;
+        return $this->_fields;
     }
 
     private function setFields($arrFields){    
@@ -89,7 +109,7 @@ class UserModel {
     // METODES ESPECIFICS de Classe:
     private function getMaxId(){
         $maxId = 0;
-        $arrfields = $this->getFields();
+        $arrFields = $this->getFields();
         foreach ($arrFields as $field=>$value){
             if ($field == "id_user"){
                 if ($maxId < $value){
@@ -97,6 +117,7 @@ class UserModel {
                 }
             }
         }        
+        echo "maxId: " . $maxId . "<br>";
         return $maxId;
 
         // TEORIA foreach:
@@ -167,15 +188,13 @@ class UserModel {
         
     }
 
-
-
-
     // implementamos aquí el SAVE a JSON y MySql:
     public function save($system,$table,$id,$newData){
 
         switch ($system){
             case 'json':                
-                                
+                $jsnUsers = file_get_contents($this->jsonFile);
+                $arrUsers = json_decode($jsnUsers, true);                
 
                 if ($id==0){
                     if (!empty($arrUsers)){
@@ -193,7 +212,6 @@ class UserModel {
                     $singleUser = $newData;                
                 }
                 // ACCION DE GRABAR
-                $objUser->save($fields); 
                 $result = file_put_contents($this->jsonFile, json_encode($singleUser));
                 return $result? true : false;                
             break;
