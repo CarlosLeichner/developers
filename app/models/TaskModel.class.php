@@ -43,10 +43,13 @@ class JsonModel extends Model{
         return $this->arrTask;
     }
     function getTaskbyID($id_task){
+        echo $id_task;
         $tasks = $this->arrTask;
+        echo $tasks;
         if (is_array($tasks)){
             foreach ($tasks as $key =>$value) {
                 if ($value['id_task'] == $id_task) {
+                    echo $tasks[$key];
                     return $tasks[$key];
                 }
             }
