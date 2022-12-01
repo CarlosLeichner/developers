@@ -1,12 +1,9 @@
 <?php 
 
-
-// require_once ('../models/TaskModel.class.php'); 
-
 class TaskController extends Controller{
 
     public function indexAction(){        
-        $user= $_SESSION['user'];
+        
            
         $TaskObj = new Task();
         $tasks = $TaskObj->getTasks();
@@ -14,35 +11,32 @@ class TaskController extends Controller{
         
     }
     public function addAction(){
-        $user= $_SESSION['user'];
+        
         $TaskObj = new Task();
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-            if ( !empty($_POST)) { 
-                
-                $taskData = array (
-                    
+
+            if (!empty($_POST['description']) && !empty($_POST['masterUsr_id']) && !empty($_POST['slaveUsr_id']) && !empty($_POST['masterUsr_id'])) { 
+
+                $taskData = array ( 
+                    $id_task= $_POST ['id_task'],
                     $description = $_POST ['description'], 
-                    $created_at = $_POST ['created_at'], 
-                    $currentStatus = $_POST ['currentStatus'], 
+                    $created_at = date("Y-m-d H:i:s"),  
                     $masterUsr_id = $_POST ['masterUsr_id'],
                     $slaveUsr_id =  $_POST ['slaveUsr_id'],
                     $initiated =  $_POST ['initiated'],
                     $done = $_POST ['done'],
-                    $deleted = $_POST ['deleted']
+                    $deleted = '0'
                 );
+                // var_dump($taskData);
                 
-                $TaskObj->createTask($slaveUsr_id, $masterUsr_id, $description ,$created_at, $initiated, $done, $deleted, $currentStatus);
+                $TaskObj->createTask($slaveUsr_id, $masterUsr_id, $description ,$created_at, $initiated, $done, $deleted);
             }
-            if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-                $data = array_merge($taskData, $_POST);}
-            if ($data){
-                $TaskObj->createTask($$slaveUsr_id, $masterUsr_id, $description ,$created_at, $initiated, $done, $deleted, $currentStatus);
-                return $TaskObj;
+           
                 header('Location: listtask');
-            }
         }
     }
+    
     public function editAction(){
         $id_task = $_GET['id_task'];
         $TaskObj = new Task();
@@ -63,7 +57,7 @@ class TaskController extends Controller{
                     $deleted = $_POST ['deleted']
                     );}
                     
-            $TaskObj->updateTask($id_task);
+            $TaskObj->updateTask($id_task, $slaveUsr_id, $masterUsr_id, $description ,$created_at, $initiated, $done, $deleted, $currentStatus);
             $task[$id_task] = $taskData;
             header('Location: ' . ROOT_PATH . '/app/views/scripts/index.phtml');
             }
@@ -99,7 +93,7 @@ class TaskController extends Controller{
         if(empty($errorMsg)){ 
             if(!empty($_POST['id_task'])){ 
                 // Update task data 
-                $update = $TaskObj->updateTask($id_task); 
+                $update = $TaskObj->updateTask($id_task, $slaveUsr_id, $masterUsr_id, $description ,$created_at, $initiated, $done, $deleted, $currentStatus); 
                 
                 if($update){ 
                     $sessData['status']['type'] = 'success'; 
@@ -116,8 +110,7 @@ class TaskController extends Controller{
                     
             }
         }
-        header('Location: ' . ROOT_PATH . '/app/views/scripts/index.phtml');
-    }
+        header('Location: listtask');    }
     public function delAction(){
         $id_task = $_GET['id_task'];
         if (!isset($_GET['id_task'])) {
@@ -130,9 +123,8 @@ class TaskController extends Controller{
         }
         if (!empty($task)) {
             $TaskObj->deleteTask($id_task);
-        }else {
         }
-        header('Location: ' . ROOT_PATH . '/app/views/scripts/index.phtml');
+        header('Location: listtask');
     }
     public function viewAction(){
         $id_task = $_GET['id_task'];
