@@ -41,7 +41,7 @@ class UserModel {
 
     private function setFields($arrFields){    
         if ($arrFields[0]==0) {
-            $arrFields[0] = getMaxId();
+            $arrFields[0] = $this->getMaxId();
         }
         $data = [
             $id_User = $arrFields[0],

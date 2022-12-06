@@ -1,138 +1,125 @@
 <?php
-require_once ("lib/base/Model.php");
+
 class TaskModel{
-
-private int $_id;
-private string $_description;
-private $_created_at;
-private $_initiated;
-private $_done ;
-private $_currentStatus_id;
-private $_deleted= False;
-private $_masterUsr_id;
-private $_slaveUsr_id;
-private $Task;
-private $db;
-//private $data = "'" .$this->_id. "','".$this->_slaveUsr_id . "','". $this->_masterUsr_id. "','". $this->_currentStatus_id. "','". $this->_done. "','". $this->_initiated. "','". $this->_created_at. "','". $this->_description."'"; 
-
-public function __construct()
-{
-    $this->Task = array();
-    $this->db = new PDO ('mysql:host=localhost;dbname=developers_mysql',"root","");
-    
-}
-public function getTask(){
-    return $this->_Task;
-}
-public function getDb(){
-    return $this->_db;
-}
-
-public function getMasterUsrId(){
-    return $this->_masterUsr_id;
-}
-public function getSlaveUsrId(){
-    return $this->_slaverUsr_id;
-}
-public function getDeleted(){
-    return $this->_deleted;
-}
-public function getCurrentStatusId(){
-    return $this->_currentStatus_id;
-}
-public function getId(){
-    return $this->_Id;
-}
-public function getDescription(){
-    return $this->_description;
-}
-public function getCreatedAt(){
-    return $this->_created_at;
-}
-public function getInitiated(){
-    return $this->_initiated;
-}
-public function getDone(){
-    return $this->_done;
-}
-public function setTask($Task){
-    $this->Task= $Task;
-}
-public function setDb($db){
-    $this->db= $db;
-}
-
-public function setCurrentStatus($_currentStatus_id){
-    $this->_currentStatus_id= $_currentStatus_id;
-}
-public function setId($_id){
-    $this->_id= $_id;
-}
-public function setDescription($_description){
-    $this->_description= $_description;
-}
-public function setcreatedAt($_created_at){
-    $this->_created_at= $_created_at;
-}
-public function setInitiated($_initiated){
-    $this->_initiated= $_initiated;
-}
-public function setDone($_done){
-    $this->_done= $_done;
-}
-public function setMasterUsrId($_masterUsr_id){
-    $this->_masterUsr_id= $_masterUsr_id;
-}
-public function setSlaveUsrId($_slaveUsr_id){
-    $this->_slaveUsr_id= $_slaveUsr_id;
-}
-public function setDeleted($_deleted){
-    $this->_deleted = $_deleted;
-}
-
-
-public function add($tasks, $data){
-    $consult = "INSERT INTO" .$tasks. " values(".$data.")";
-    $result= $this->db->query($consult);
-    if ($result) {
-        return $result;
-    }else {
-        return false;
-    }
-    
-}
-
-public function show($tasks, $condition){
-    $consult = "SELECT * FROM ".$tasks. " WHERE ".$condition.";";
-    $result = $this->db->query($consult);
-    while($row = $result->fetchAll(PDO::FETCH_ASSOC)){
-        $this->tasks[]= $row;
-    }
-    return $this->tasks;
-}
-public function update ($tasks, $data, $condition ){
-    $consult = "UPDATE " .$tasks. " SET ".$data. " WHERE ".$condition ;
-    $result = $this->db->query($consult);
-    if ($result) {
-       return $result;
-    }else {
-        return false;
-    }
-    
-}
-
-public function delete($tasks, $condition){
-    $consult = "DELETE FROM ".$tasks ." WHERE ".$condition;
-    $result = $this->db->query($consult);
-    if ($result) {
-        return true;
-    }else {
-        return false;
-    }
-    
-}
+    private $arrFields= array (
+        'id_task' => '0',
+        'description' => '',
+        'currentStatus' => 'initiated',
+        'created_at' => '', 
+        'done' => '',
+        'masterUsr_id'=>'',
+        'slaveUsr_id'=>''
+    );
    
-
+    private $arrTasks;
+    public function __contructor($arrFields){
+        
+        if (!file_exists(__DIR__.'../db/tasks.json')) {
+            $this->arrTasks = $this->putJson('[]');
+        }else {
+            $this->arrTasks = json_decode(file_get_contents(ROOT_PATH.'/db/tasks.json',true)); 
+        }
+        $this->arrFields = array(
+            '"id_task"' => "0",
+            'created_at' => date("Y-m-d"),
+            'description' => $arrFields['description'],
+            'masterUsr_id' => $arrFields['masterUsr_id'],
+            'slaveUsr_id'  => $arrFields['slaveUsr_id'],
+            'done' => date("Y-m-d")
+        );  
+    }
+    public function putJson($arrFields)
+    {
+        json_encode(file_put_contents(ROOT_PATH. '/db/tasks.json', $arrFields));
+        
+    }
+    
+    public function getTasks(){
+        $tasks = json_decode(file_get_contents(ROOT_PATH.'/db/tasks.json'),true);
+        return $tasks;
+    }
+    public function getTaskById($taskId){
+        $tasks = $this->arrTasks;
+        foreach ($tasks as $task) {
+            if ($task['id_task']== $taskId) {
+                return json_encode($task);
+            }
+        }return null;
+        // $tasks = $this->getTasks();
+        // $key = array_column($tasks,'id_task');
+        // return json_encode($tasks[$key]);
+    }
+    
+    public function getId(){
+        $tasks = $this->arrTasks;
+        foreach ($tasks as $task) {
+          $taskid = $task ['id_task'];
+           return json_encode($taskid);
+        }
+    }
+    // public function setId(){
+    //     $record_number = count($this->arrTasks);
+    //     for ($i=0; $i <= $record_number ; $i++) { 
+            
+    //         if ($this->arrFields['id_task'] == 0) {
+    //             $this->arrFields['id_task']=1;
+    //         }else{
+    //             $this->arrFields['id_task']=+1;
+    //         }
+    //     }        
+    // }
+   
+    public function completedTask($taskid){
+        $tasks = $this->arrTask;
+        if (is_array($tasks)){
+            foreach ($tasks as $task) {
+                if($task['id_task'] === $taskid){
+                $task['currentStatus'] = 'completed';
+                $task['done'] = date("Y-m-d");
+                }
+            }
+         $this->putJson($task);
+        }
+    }
+    public function initiatedTask($taskid){
+        $tasks = $this->arrTask;
+        if (is_array($tasks)){
+            foreach ($tasks as $task) {
+                if($task['id_task'] === $taskid){
+                    $task['currentStatus'] = 'in progress';
+                    
+                }
+            }
+            $this->putJson($task);
+        }
+    }
+    public function deletedTask($taskid){
+        $tasks = $this->arrTask;
+        if (is_array($tasks)){
+            foreach ($tasks as $task) {
+                if($task['id_task'] === $taskid){
+                    $task['currentStatus'] = 'deleted';
+                    $task['done'] = date("Y-m-d") ;
+                }
+            }
+            $this->putJson($task);
+        }
+    }
+    public function createTask($arrFields){
+        $tasks = self::getTasks();
+        $arrFields['id_task']=0;
+        if ($this->arrFields['id_task']=0) {
+            $this->arrFields['id_task']=1;
+        }else {
+            $this->arrFields['id_task']=+1;
+        }
+        $tasks[]=$this->arrFields;
+        self::putJson($tasks);
+        return $this->arrFields;
+    }
 }
+
+
+
 
 ?>

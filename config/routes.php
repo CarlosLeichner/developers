@@ -10,27 +10,21 @@
  * '/calendar' => 'calendar#index'
  */
 $routes = array(
-
-	// rutes de Proves
-	'/test'  => 'test#index',
-	'/test2' => 'test2#index',
-	'/check' => 'test#check',
-	'/check2' => 'test2#check',
-
-	// rutes per taula USERS
-	'/'         => 'user#index',
-	'/index'    => 'user#index',
-	// '/listuser' => 'user#index',
-	'/adduser'  => 'user#add',
-	'/edituser' => 'user#edit',   // 'UserController.php?id=3' ... rebrà per GET la ID ... function editAction($_GET[id])
-	'/deluser'  => 'user#del',
-
-	// rutes per taula TASKS
+	'/test' => 'test#index',
+	
 	'/listtask' => 'task#index',
 	'/addtask'  => 'task#add',
 	'/edittask' => 'task#edit',
 	'/deltask'  => 'task#del',
 	'/viewtask' => 'task#view',
-	'/searchtask' => 'task#search'
-	
+	'/searchtask' => 'task#search',
+	'/searchtodeletetask' => 'task#searchtodelete',
+	'/viewalltask' => 'task#viewall',
+	// rutes per taula USERS
+    '/'         => 'user#index',
+    '/index'    => 'user#index',
+    // '/listuser' => 'user#index',
+    '/adduser'  => 'user#add',
+    '/edituser' => 'user#edit',   // 'UserController.php?id=3' ... rebrà per GET la ID ... function editAction($_GET[id])
+    '/deluser'  => 'user#del'
 );

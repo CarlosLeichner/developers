@@ -4,120 +4,99 @@ class UserModel {
 
     // ATRIBUTS
     private $_jsonFile = ROOT_PATH . ("/db/users.json"); 
+
+    public $_arrUsers;
+
     public $_fields = array(
-        // 'id_user' => '0',
+        'id_user' => '0',
         'strCreatedAt' => '',
-        'strName' => '',
-        'strRol'  => "",
+        'name' => '',
+        'cog'  => '',
+        'rol'  => '',
         'deleted' => '0'
     );
 
-    // utilizar una función existente que ya lo convierte en un Array asociativo automáticamente
-    
-    // private int $_id_User = 0;
-    // private string $_strCreatedAt = "";
-    // private string $_strName = "";
-    // private string $_strRol = "";
-    // private int $_deleted = 0;
+    // CONSTRUCTOR      
+    public function __construct($arrFields){
+        
+        if (!file_exists(ROOT_PATH . "/db/users.json")){
+            $this->_jsonFile = file_put_contents(ROOT_PATH . "/db/users.json","[]");
+        }
+        // file_get: llegeix Fitxer txt (retorna text, en aquest cas format json)
+        $jsnUsers = file_get_contents($this->_jsonFile);
+        // json_decode:  converteix un JSON string, en un ARRAY
+        $arrUsers = json_decode($jsnUsers, true);             
+        // ens guardem en State la llista d'users
+        $this->_arrUsers = $arrUsers;
 
-    // CONSTRUCTOR  - no tengo claro si hacer count($_arrUsers) desde el Controller y pasarle el argumento id+1 
-    // public function __construct($path_json_file){
-        public function __construct($arrFields){
-            
-            if (!file_exists(ROOT_PATH . "/db/users.json")){
-                $this->_jsonFile = file_put_contents(ROOT_PATH . "/db/users.json","[]");
-            }
-            $jsnUsers = file_get_contents($this->_jsonFile);
-            $arrUsers = json_decode($jsnUsers, true);             
-
-            echo "var_dump de model<br>";
-            var_dump($arrFields);
-
-        // $this->_jsonFile = $pathJsonFile;
+        // ens guardem en State l'usuari actual que ha entrat
         $this->_fields=array(
             'id_user' => $this->getMaxId(),
-            'strCreatedAt' => date("Y-m-d H:i:s"),
-            'strName' => $arrFields['nom'],
-            'strRol'  => $arrFields['rol'],
+            'createdAt' => date("Y-m-d H:i:s"),
+            'name' => $arrFields['nom'],
+            'rol'  => $arrFields['rol'],
             'deleted' => '0'
         );  
-        $this->saveJson($arrUsers,$this->_fields);      
+        // echo "en UserModel::__construct() ... var_dump de this->_fields:<br>";
+        // var_dump($this->_fields);
     }
 
-    public function saveJson($arrUsers, array $arrFields){
+    public function exists($nom){
+        echo "<br>function exists -> $ nom = " . $nom ."<br>";
+        $match = false;
 
+        foreach ($this->_arrUsers as $user) {
+            // echo "var_dump de $ user : " . var_dump($user) . "<br>";
+            if ($user['name'] == $nom) {
+                $match = true;
+            }
+        }
+        echo "match: " . $match;
+        return $match;
+    }
+
+    public function saveJson($arrUsers, array $singleUser){
         $result = false;
-        if (!empty($arrFields)){            
-            array_push($arrUsers, $arrFields);            
-            $result = file_put_contents($this->_jsonFile, json_encode($arrUsers));
+        if (!empty($singleUser)){      
+            // afegim al STATE dels Atributs, pero encara és VOLATIL
+            array_push($arrUsers, $singleUser); 
+            // json_encode:  converteix un ARRAY en un JSON string
+            $jsnUsers = json_encode($arrUsers);
+            // file_put: graba en Fitxer txt
+            $result = file_put_contents($this->_jsonFile,$jsnUsers);
+            // tot lo d'abans però en una fila:
+            // $result = file_put_contents($this->_jsonFile, json_encode($arrUsers));
         }
         return $result? true : false;                
     }
 
-    // GETTERS-SETTERS - deberán ser privados
-    private function getFields(){
-        return $this->_fields;
+    // GETTERS-SETTERS
+    public function getFields(){
+        // if ($field==''){
+            return $this->_fields;
+        // }else{
+            // return $this->_fields[$field];
+        // }
     }
 
-    private function setFields($arrFields){    
-        if ($arrFields[0]==0) {
-            $arrFields[0] = getMaxId();
-        }
-        $data = [
-            $id_User = $arrFields[0],
-            $strCreatedAt = date("Y-m-d H:i:s"),  // formato "2022-12-31 15:30:54"
-            $strName = $arrFields[1],
-            $strRol = $arrFields[2],           
-            $deleted = $arrFields[3],
-        ];
-        array_push($this->_arrFields,$data);
-    }
-
-    // estos ya no los vamos a usar porque ahora tenemos los Atributos dentro de un Array
-    private function getUserId(){
-        return $this->_id_User;
-    }
-    private function getUserCreatedAt(){
-        return $this->_strCreatedAt;
-    }
-    private function getUserName(){
-        return $this->_strName;
-    }
-    private function setUserName($newName){
-        $this->_strName = $newName;
-    }
-    private function getUserRol(){
-        return $this->_strRol;
-    }
-    private function setUserRol($newRol){
-        $this->_strRol = $newRol;
-    }
-
-    private function setDeleted($status){
-        $this->_deleted = $status;
-    }
-
-    // METODES
-    // métodos abstractos (vacíos) que obligará a la subclase a implementarlos:  saveJSON($data), saveMSQL($data), saveMongo($data)
-
-    // public function show($table, $id, $system['json','mysql','mongo']){
-    // }
-
-    // public function save($table, $data, $system['json','mysql','mongo']){
+    // private function setFields($arrFields){    
+    //     if ($arrFields[0]==0) {
+    //         $arrFields[0] = getMaxId();
+    //     }
+    //     $data = [
+    //         $id_User = $arrFields[0],
+    //         $strCreatedAt = date("Y-m-d H:i:s"),  // formato "2022-12-31 15:30:54"
+    //         $name = $arrFields[1],
+    //         $rol = $arrFields[2],           
+    //         $deleted = $arrFields[3],
+    //     ];
+    //     array_push($this->_arrFields,$data);
     // }
 
     // METODES ESPECIFICS de Classe:
     private function getMaxId(){
-        $maxId = 0;
-        $arrFields = $this->getFields();
-        foreach ($arrFields as $field=>$value){
-            if ($field == "id_user"){
-                if ($maxId < $value){
-                    $maxId = $value;
-                }
-            }
-        }        
-        echo "maxId: " . $maxId . "<br>";
+        $maxId = count($this->_arrUsers)+1; 
+        echo "<br> UserModel->getMaxId...maxId: " . $maxId . "<br>";
         return $maxId;
 
         // TEORIA foreach:

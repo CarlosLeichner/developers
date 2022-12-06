@@ -1,4 +1,4 @@
-
+<?php include ROOT_PATH.'/web/includes/header.php';?>
 <html>
 <head>
   <meta charset="UTF-8">
@@ -14,56 +14,60 @@
     <nav class="flex justify-center space-x-4">
         
         
-        <a href="listtask" class="font-bold px-3 py-2 text-slate-700 rounded-lg hover:bg-slate-100 hover:text-slate-900">task</a>
+        <h1>INDEX</h1>
         
       </nav>
-    
-    
+
+      <hijo  class="flex justify-center items-center bg-gray-300 text-center w-full">
+
+        </form>
+        
+
+
+            <form action = "" method = "POST" class="flex justify-center ">
+              <section class="flex justify-center items-center bg-gray-300 text-center w-full ">
+                <div class="max-w-md w-full  bg-white rounded p-6 my-4 space-y-4 ">
+              
+                <span class=" block text-sm font-medium text-slate-700">Choose an Option:</span>
+              
+
+                
+                <div class = "flex-col flex items-center justify-evenly ">
+                  <button type= "submit" id = "addtask" name = "addtask" class="my-4 w-40 py-4 bg-gray-600 hover:bg-gray-400 rounded text-sm font-bold text-pink-600 border-pink-600 transition duration-200">
+                  <a href="addtask" class =" text-white underline hover:no-underline no-underline text-white-600 border-pink-600 transition duration-200 hover:text-white-600" >Create Task</a>
+
+                  </button>
+                  <button type= "submit" id = "addtask" name = "addtask" class="my-4  w-40 py-4 bg-gray-600 hover:bg-gray-400 rounded text-sm font-bold text-white-50 transition duration-200">
+                  <a href="searchtask" class ="text-white underline hover:no-underline no-underline text-white-600 border-pink-600 transition duration-200 hover:text-white-600" >Search Task</a>
+
+                  </button>
+                  <button type= "submit" id = "addtask" name = "addtask" class="my-4 w-40 py-4 bg-gray-600 hover:bg-gray-400 rounded text-sm font-bold text-white-50 transition duration-200">
+                  <a href="viewalltask" class ="text-white underline hover:no-underline no-underline text-white-600 border-pink-600 transition duration-200 hover:text-white-600" >View All Task</a>
+
+                  </button>
+                  <button type = "submit" id= "cancel" name ="cancel" class="my-4  w-40 py-4 bg-gray-600 hover:bg-gray-400 rounded text-sm font-bold text-white-600 border-pink-600 transition duration-200">
+                  <a href="searchtodeletetask" class ="text-white underline hover:no-underline no-underline text-white-600 border-pink-600 transition duration-200 hover:text-white-600" >Delete Task</a>
+                  </button>
+                  </div> 
+                </div>
+              
+              
+          </div>
+          </section>
+        
+        
       
+        
+        
+    </form>
 
-    
-
-      <hijo method = "POST"  class="flex flex-center m-4">
-
-        <a href="addtask" class=" bg-clip-border p-6 border-8 border-red-800 group block max-w-xs mx-auto rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
-          <div class="flex items-center space-x-3">
-          <svg class=" h-6 w-6 stroke-sky-500 group-hover:stroke-white" fill="none" viewBox="0 0 24 24"><!-- ... --></svg>
-          <h3 class="text-slate-900 group-hover:text-white text-sm font-semibold">Create task.</h3>
-          </div>
-          <p class="text-slate-500 group-hover:text-white text-sm">Create a task from a work a user.</p>
-        </a>
-
-       <a href="searchtask" class=" bg-clip-border p-6 border-8 border-red-800 group block max-w-xs mx-auto rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
-          <div class="flex items-center space-x-3">
-          <svg class=" h-6 w-6 stroke-sky-500 group-hover:stroke-white" fill="none" viewBox="0 0 24 24"><!-- ... --></svg>
-          <h3 class="text-slate-900 group-hover:text-white text-sm font-semibold">View task.</h3>
-          </div>
-          <p class="text-slate-500 group-hover:text-white text-sm">View a task from a work a user.</p>
-        </a>
-
-    
-
-        <a href="edittask" class=" bg-clip-border p-6 border-8 border-red-800 group block max-w-xs mx-auto rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
-          <div class="flex items-center space-x-3">
-          <svg class=" h-6 w-6 stroke-sky-500 group-hover:stroke-white" fill="none" viewBox="0 0 24 24"><!-- ... --></svg>
-          <h3 class="text-slate-900 group-hover:text-white text-sm font-semibold">Modify task.</h3>
-          </div>
-          <p class="text-slate-500 group-hover:text-white text-sm">Modify a new task from a work a user.</p>
-        </a>
-
-
-
-        <a href="deltask" class=" bg-clip-border p-6 border-8 border-red-800 group block max-w-xs mx-auto rounded-lg p-6 bg-white ring-1 ring-slate-900/5 shadow-lg space-y-3 hover:bg-sky-500 hover:ring-sky-500">
-          <div class="flex items-center space-x-3">
-          <svg class=" h-6 w-6 stroke-sky-500 group-hover:stroke-white" fill="none" viewBox="0 0 24 24"><!-- ... --></svg>
-          <h3 class="text-slate-900 group-hover:text-white text-sm font-semibold">Delete task.</h3>
-          </div>
-          <p class="text-slate-500 group-hover:text-white text-sm">Delete a new task from a work a user.</p>
-        </a>
-
+        
   </hijo>
 
     
-    
+  <?php
+include ROOT_PATH.'/web/includes/footer.php';?>
 
 </body>
+
+        
