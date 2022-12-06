@@ -1,83 +1,104 @@
 <?php
 
-echo "entrant a UserController... <br><br>";
+// echo "<br>entrem a UserController... ";
 
 require_once ROOT_PATH . ('/app/models/UserModel.php');
 
 class UserController extends ApplicationController
 {    
-    // LANDING - Funció per Mostrar
+    // LANDING - Funció per Entrar Login usuari
 	public function indexAction(){
-        
 
-        echo "estoy en indexAction!!";        
-        // vista
         // require_once ROOT_PATH . ("/app/views/scripts/user/index.phtml");
-        
-        if (isset($_POST['inpName'])){
 
-            // echo "estoy en IF de btnEntrar <br><br>";            
-            $fields = array(
-                'nom' => $_POST["inpName"],
-                'rol' => $_POST["inpRol"]
-            );        
-            // var_dump($fields);                        
-            $objUser = new UserModel($fields);       
-            // echo "var_dump de controller<br>";
-            // var_dump($objUser);
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
-            // obrim sessió perquè no dupliqui gent
-            if (!isset($_SESSION)){
-                session_start();
-            }            
-            header("Location: " . "/listtask");
-        }                
-    }
+            if (isset($_POST['inpName'])){
+                // DEBUG:
+                echo "entrem a UserController::indexAction -> IF-isset-POST[inpName]<br><br>";
 
-    public function addAction(){                
-        
-        // header('Location:' .ROOT_PATH.'/app/views/scripts/user/index.phtml');
+                // carreguem els valors dels txtBox a dins un array
+                $fields = array(
+                    'nom' => $_POST["inpName"],
+                    // 'cog' => $_POST["inpCog"],
+                    // 'rol' => $_POST["inpRol"]
+                    'pwd' => $_POST["inpPwd"]
+                );       
+                // DEBUG:
+                // var_dump($fields);                        
 
-        // echo "entrando a user Add";
-        echo "entrando a user addAction <br> <br>";
-        exit;
+                // instanciem objecte i el seu constructor omple els camps
+                $objUser = new UserModel($fields);                       
 
-        if (!empty($_POST)) {
-        
-            // 1. recollim les dades
-            $fields = array(
-                'nom' => $_POST["inpName"],
-                'rol' => $_POST["inpRol"]
-            );
+                // comprobem que existeixi:
+                if ($objUser->exists($fields['nom'])) {
 
-            // 1.1. TEST
-            // $data['nom'] = "nombreTest";   
-			// $data['rol'] = "rolTest";      
+                    // echo "<br>Usuario encontrado!!  --> puedes ir a listtask...<br>";
+                    // if (!isset($_SESSION)){
+                    //     session_start();
+                    // } 
+                    $_SESSION['nom'] = $objUser->getFields('strName');
+                    $_SESSION['rol'] = $objUser->getFields('strRol');                    
+                    // $_SESSION['tasks'] = $objUser->getTasksByUserId();                    
+                    header("Location: listtask");
+                }else{
+                    // echo "Usuari no trobat. Vols registrar-te?<br>"; --> incrustem en la vista                    
+                    // si clickem, continuarà en aquest fitxer UserController -> mètode addAction
+                }
 
-            // 2. Instanciem l'objecte real        
-            $objUser = new UserModel($fields);
-        
-            // 3. interactuar amb Model (mètode seu) per llegir/grabar
-                               
+                // tanquem sessió
+                // session_destroy();
+            }                
         }
-		
-        // 4. redireccionem cap a la pàgina de view que volguem
-        header('Location:' .ROOT_PATH.'/app/views/scripts/user/index.phtml');
-                
-        // 5. Tota funció ha de retornar quelcom (true = ha anat bé)
-        return true;
     }
 
-    // Funció per Eliminar
-    public function delAction($id){
-        // Instanciem l'objecte real        
-        $objUser = new UserModel();
-            $data['nom'] = $_POST["inpName"];
-            $data['rol'] = $_POST["inpRol"]; 
-        $objUser->save($data);
-        return true;
+    // funció per AFEGIR (CREATE)
+    public function addAction(){                        
+
+        // DEBUG: 
+        echo "entrant a user addAction<br>";
+
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if ((isset($_POST['inpName'])) && (isset($_POST['inpRol']))) {   
+
+                // 1. recollim les dades
+                $fields = array(
+                    'nom' => $_POST["inpName"],
+                    'cog' => $_POST["inpCog"],
+                    'rol' => $_POST["inpRol"],
+                    'pwd' => $_POST["inpPwd"]                    
+                );
+
+                // 2. Instanciem l'objecte real        
+                $objUser = new UserModel($fields);            
+            
+                // 3. interactuar amb Model (mètode seu) per llegir/grabar
+                $result = $objUser->saveJson($objUser->_arrUsers,$objUser->_fields);                 
+
+                // 4. permetem anar a View Tasks, o mens Error
+                if ($result==true){
+                    header("Location: listtask");
+                    // header('Location:' .ROOT_PATH.'/app/views/scripts/user/index.phtml');
+                }else{
+                    echo "No hem pogut grabar el nou usuari.";
+                }
+            }
+        }        
     }
-    // Funció per Modificar - vista modif 
+
+    // Funció per Eliminar (només si ets Admin 'boss')
+    public function delAction($id){
+        if ($_SESSION['rol'] == "boss") {
+            $arrUsersToShow = [];
+            foreach ($json_users as $register){
+                $objUser = new UserModel;
+                array_push($arrUsersToShow,$objUser);
+            }
+            foreach ($register as $field){
+                echo $field->show();
+            }
+        }
+    }
 
 
     function proves(){
@@ -91,20 +112,11 @@ class UserController extends ApplicationController
             // $objUser->setRol($register[2]);            
             array_push($arrUsers,$objUser);
         }
-
-
         foreach ($arrUsers as $person){
-            echo $person->showUsers();
+            echo $person->show();
         }
         // $objUser->showUser();
     }
-
-
-    // define('objUSERS',file_get_contents("../db/users.json"));
-    // define('objUSERS', JSON.parse("../db/users.json"));
-    // $arrUsers = JSON.stringify("../db/users.json");
-    // var_dump($arrUsers);
-
 
 }
 

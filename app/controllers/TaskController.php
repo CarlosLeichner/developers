@@ -1,153 +1,163 @@
-<?php 
+<?php
+//require_once ('app/models/TaskModel.php');
+ require ROOT_PATH.'/app/models/TaskModel.php';
+class TaskController extends Controller {
 
-class TaskController extends Controller{
+    public function indexAction(){
 
-    public function indexAction(){        
-        
-           
-        $TaskObj = new Task();
-        $tasks = $TaskObj->getTasks();
-     
-        
+        echo "hola desde indexAction";
     }
     public function addAction(){
-        
-        $TaskObj = new Task();
-
+        echo "hola desde addAction";
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (isset($_POST['masterUsr_id']) && isset($_POST['description']) && isset($_POST['created_at']) && isset($_POST['done']) && isset($_POST['currentStatus'])){
+                $arrFields = array(
+                    'masterUsr_id' => $_POST["masterUsr_id"],
+                    //no logro traer el id del q debe autoasignarse cuando se crea la tarea
+                    'id_task' => $_POST["id_Task"],
+                    'description' => $_POST["description"],
+                    'created_at' => $_POST["created_at"],
+                    'done' => $_POST["done"],
+                    'currentStatus' => $_POST["currentStatus"]);
 
-            if (!empty($_POST['description']) && !empty($_POST['masterUsr_id']) && !empty($_POST['slaveUsr_id']) && !empty($_POST['masterUsr_id'])) { 
+                    
+                    $taskObj = new TaskModel($arrFields);
+                    $result = $taskObj->createTask($arrFields);
 
-                $taskData = array ( 
-                    $id_task= $_POST ['id_task'],
-                    $description = $_POST ['description'], 
-                    $created_at = date("Y-m-d H:i:s"),  
-                    $masterUsr_id = $_POST ['masterUsr_id'],
-                    $slaveUsr_id =  $_POST ['slaveUsr_id'],
-                    $initiated =  $_POST ['initiated'],
-                    $done = $_POST ['done'],
-                    $deleted = '0'
-                );
-                // var_dump($taskData);
-                
-                $TaskObj->createTask($slaveUsr_id, $masterUsr_id, $description ,$created_at, $initiated, $done, $deleted);
+                    
+                    if ($result==true){
+                        header("Location: listtask");
+                    }else{
+                        echo "Error creating Task";
+                    }
+            }    return $result;   
+        }
+        
+    }
+    public function delAction(){ //dudas sobre el action de delete si las paginas esta bien referenciadas
+        echo "hola desde delAction";
+        // if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+        //     if (isset($_POST['id_task'])){
+        //         $arrFields = array(
+        //             'masterUsr_id' => $_POST["masterUsr_id"],
+        //             'description' => $_POST["description"],
+        //             'created_at' => $_POST["created_at"],
+        //             'done' => $_POST["done"],
+        //             'currentStatus' => $_POST["currentStatus"]);
+        //     }
+        //     $taskObj= New TaskModel($arrFields);
+        //     // if ($arrFields['currentStatus'=='']) {
+        //     //     # code...
+        //     // }
+        // }
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (isset ($_POST['id_task'])) {
+                $taskObj = new TaskModel();
+                $taskid= $_POST['id_task'];
+                $tasks = $taskObj->getTasks();
+                foreach ($tasks as $task) {
+                    if ($task['id_task']==$taskid){
+                        $_POST ['description'] = $task ['description'];
+                        $_POST ['created_at'] = $task ['created_at'];
+                        $_POST ['done'] = $task ['done'];
+                        $_POST ['masterUsr_id'] = $task ['masterUsr_id'];
+                        $_POST ['slaveUsr_id'] = $task ['slaveUsr_id'];
+                        $_POST ['currentStatus'] = $task ['currentStatus'];
+                        return json_encode ($task);
+                        
+                    }
+                }
+            ///header('Location: viewtask');
+
             }
-           
-                header('Location: listtask');
         }
     }
-    
     public function editAction(){
-        $id_task = $_GET['id_task'];
-        $TaskObj = new Task();
-        $TaskObj->getTaskbyID($id_task);
-        if ($_SERVER['REQUEST_METHOD'] == 'GET') {
-
-            if(isset($_GET['id_task'])){
-                if ($_GET['id_task']=== $id_task) {
-                $taskData = array(
-
-                    $description = $_POST ['description'], 
-                    $created_at = $_POST ['created_at'], 
-                    $currentStatus = $_POST ['currentStatus'], 
-                    $masterUsr_id = $_POST ['masterUsr_id'],
-                    $slaveUsr_id =  $_POST ['slaveUsr_id'],
-                    $initiated =  $_POST ['initiated'],
-                    $done = $_POST ['done'],
-                    $deleted = $_POST ['deleted']
-                    );}
-                    
-            $TaskObj->updateTask($id_task, $slaveUsr_id, $masterUsr_id, $description ,$created_at, $initiated, $done, $deleted, $currentStatus);
-            $task[$id_task] = $taskData;
-            header('Location: ' . ROOT_PATH . '/app/views/scripts/index.phtml');
-            }
-        } if (!isset($_POST['id_task'])) {
-            echo "not found edittask";
-            exit;
+        echo "hola desde editAction";
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (isset ($_POST['id_task'])){}
+                if (isset($_POST['masterUsr_id']) && isset($_POST['description']) && isset($_POST['created_at']) && isset($_POST['done']) && isset($_POST['currentStatus'])){
+                    $arrFields = array(
+                        'masterUsr_id' => $_POST["masterUsr_id"],
+                        'description' => $_POST["description"],
+                        'created_at' => $_POST["created_at"],
+                        'done' => $_POST["done"],
+                        'currentStatus' => $_POST["currentStatus"]);
+                        
+                    $taskObj = new TaskModel($arrFields);
+                    if ($_POST ['currentStatus']==='In Progress') {
+                        $inprogress = $taskObj->initiatedTask($_POST['id_task']);
+                    }elseif ($_POST ['currentStatus']==='Deleted') {
+                        $deleted = $taskObj->deletedTask($_POST['id_task']);
+                    }elseif ($_POST ['currentStatus']==='Completed') {
+                        $completed = $taskObj->completedTask($_POST['id_task']);
+                    }elseif ($_POST ['currentStatus']==='Initiated') {
+                        $initiated = $taskObj->initiatedTask($_POST['id_task']);
+                    $result = $taskObj->putJson($arrFields);
+                    if ($result==true){
+                        header("Location: listtask");
+                    }else{
+                        echo "Error creating Task";
+                    }
+            }  return $result;
         }
-        
-            
-            //  validation 
-            $errorMsg = ''; 
-            if(empty($description)){ 
-                $errorMsg .= '<p>Please enter valid description.</p>'; 
-            } 
-            if(empty($created_at)) { 
-                $errorMsg .= '<p>Please enter a valid date.</p>'; 
-            } 
-            if(empty($currentStatus)){ 
-                $errorMsg .= '<p>Please set a status.</p>'; 
-            } 
-            if(empty($masterUsr_id)){ 
-                $errorMsg .= '<p>Please enter valid ID.</p>'; 
-            } 
-            if(empty($slaverUsr_id)){ 
-                $errorMsg .= '<p>Please enter valid ID.</p>'; 
-            } 
-        
-            
-            
-        // Store the submitted field value in the session 
-        $sessData['taskData'] = $taskData; 
-        // Submit the form data 
-        if(empty($errorMsg)){ 
-            if(!empty($_POST['id_task'])){ 
-                // Update task data 
-                $update = $TaskObj->updateTask($id_task, $slaveUsr_id, $masterUsr_id, $description ,$created_at, $initiated, $done, $deleted, $currentStatus); 
-                
-                if($update){ 
-                    $sessData['status']['type'] = 'success'; 
-                    $sessData['status']['msg'] = 'Member data has been updated successfully.'; 
-                    
-                    // Remove submitted fields value from session 
-                    unset($sessData['taskData']); 
-                }else { 
-                    $sessData['status']['type'] = 'error'; 
-                    $sessData['status']['msg'] = 'Some problem occurred, please try again.'; 
-                    // Set redirect url 
-                    
-                }
-                    
-            }
-        }
-        header('Location: listtask');    }
-    public function delAction(){
-        $id_task = $_GET['id_task'];
-        if (!isset($_GET['id_task'])) {
-            echo "not found";
-            exit;
-        }else {
-            $TaskObj = new Task();
-
-            $TaskObj->getTaskbyID($id_task);
-        }
-        if (!empty($task)) {
-            $TaskObj->deleteTask($id_task);
-        }
-        header('Location: listtask');
+          
+    }
+}
+    public function searchAction(){
+        echo "hola desde searchAction";
+       
     }
     public function viewAction(){
-        $id_task = $_GET['id_task'];
- //       if (!isset($_GET['id_task'])) {
-   //         echo "not found";
-     //       exit;
-       // }else {
-            $TaskObj = new Task();
+        echo "hola desde viewAction";
+        if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+            if (isset ($_POST['id_task'])) {
+                $taskObj = new TaskModel();
+                $taskid= $_POST['id_task'];
+                $tasks = $taskObj->getTasks();
+                foreach ($tasks as $task) {
+                    if ($task['id_task']==$taskid){
+                        $_POST ['description'] = $task ['description'];
+                        $_POST ['created_at'] = $task ['created_at'];
+                        $_POST ['done'] = $task ['done'];
+                        $_POST ['masterUsr_id'] = $task ['masterUsr_id'];
+                        $_POST ['slaveUsr_id'] = $task ['slaveUsr_id'];
+                        $_POST ['currentStatus'] = $task ['currentStatus'];
+                        return json_encode ($task);
+                        
+                    }
+                }
+            ///header('Location: viewtask');
 
-            $TaskObj->getTaskbyID($id_task);
-        //}
-    
-    
-    }public function searchAction(){
-        $id_task = $_GET['id_task'];
- 
-        $TaskObj = new Task();
-
-        $TaskObj->getTaskbyID($id_task);
+            }
+        }
+       
+    }
+    public function searchtodeleteAction(){
+        echo "hola desde searchtodeleteAction";
         
+
+    }
+    public function viewallAction(){
+        
+        $taskObj = new TaskModel();
+        return $taskObj->getTasks();
+  
     }
     
-    
-}   
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 ?>
