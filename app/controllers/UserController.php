@@ -1,6 +1,15 @@
 <?php
 
-// echo "<br>entrem a UserController... ";
+// -------------------------------------------------------------------------------
+// FUNCTIONS:
+// @ indexAction --> landing page where user input the credentials (usr/pwd)
+//                   ... if user found, can step into landing listtasks view
+//                   ... else user blocked, or can Register into adduser view
+// @ addAction ----> adduser view to let Register a NEW user into BD
+
+// @ delAction ----> deluser view let search by Id and Update field deleted=true
+
+// -------------------------------------------------------------------------------
 
 require_once ROOT_PATH . ('/app/models/UserModel.php');
 
@@ -9,19 +18,21 @@ class UserController extends ApplicationController
     // LANDING - Funció per Entrar Login usuari
 	public function indexAction(){
 
-        // require_once ROOT_PATH . ("/app/views/scripts/user/index.phtml");
-
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
             if (isset($_POST['inpName'])){
+                // COOKIES - només si marcat 'recordar per X temps', en segons, p.ex.: 86400 = 1 day
+                if (!empty($_POST['remember'])) {
+                    setcookie('userDevelopersTeam',$_POST['inpName'], time()+3600 + (int) $_POST['rememberTime'], "/"); 
+                }
                 // DEBUG:
-                echo "entrem a UserController::indexAction -> IF-isset-POST[inpName]<br><br>";
+                // echo "entrem a UserController::indexAction -> IF-isset-POST[inpName]<br><br>";
 
                 // carreguem els valors dels txtBox a dins un array
                 $fields = array(
                     'nom' => $_POST["inpName"],
-                    // 'cog' => $_POST["inpCog"],
-                    // 'rol' => $_POST["inpRol"]
+                    'cog' => '',     // $_POST["inpCog"],
+                    'rol' => '',     // $_POST["inpRol"]
                     'pwd' => $_POST["inpPwd"]
                 );       
                 // DEBUG:
@@ -56,7 +67,7 @@ class UserController extends ApplicationController
     public function addAction(){                        
 
         // DEBUG: 
-        echo "entrant a user addAction<br>";
+        // echo "entrant a user addAction<br>";
 
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             if ((isset($_POST['inpName'])) && (isset($_POST['inpRol']))) {   
