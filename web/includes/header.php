@@ -19,25 +19,25 @@
     <script src="https://kit.fontawesome.com/afe5486742.js" crossorigin="anonymous"></script>    
 </head>
 <body class="bg-blue-200">
-    <nav class="navbar navbar-dark bg-dark">
-        <div class="container">
-            <div class="d-inline">
-                <img src="./images/tasks_96x96.png"/>
-                <a href="index.php" class="navbar-brand">PHP Developers Team - CRUD with json, mySql, mongo.</a>
+    <nav class="navbar navbar-dark bg-pink-500 flex">
+        <div class="container justify-start">
+            <div class="d-inline flex-row">
+                <img src="./images/tasks_96x96.png"/>                
+            </div>
+            <div>
+                <a href="#" class="navbar-brand font-extrabold">PHP Developers Team v2.0</a>
             </div>
         </div>
     </nav>
-    <br>
-    <br>
 
-    <h3>BD - JSON: users.json</h3>
+    <!-- <p>BD - JSON: users.json</p> -->
     <?php include("../db/users.json"); ?>
-    <br><br>
+    <br>
 
-    <h3>BD - JSON: tasks.json</h3>
-    <?php include("../db/tasks.json"); ?>
-    <br><br>
+    <!-- <h3>BD - JSON: tasks.json</h3> -->
+    <!-- <?php include("../db/tasks.json"); ?> -->
+    <!-- <br><br> -->
 
-    <h3>BD - JSON: status.json</h3>
-    <?php include("../db/status.json"); ?>
-    <br><br>
+    <!-- <h3>BD - JSON: status.json</h3> -->
+    <!-- <?php include("../db/status.json"); ?> -->
+    <!-- <br><br> -->
